@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -27,9 +28,15 @@ namespace MathematicalEpidemiology
         private State state = new State();
         private Parameters parameters = new Parameters();
 
+        private BackgroundWorker backgroundWorker;
+
+        private double[,] solution;
+
         public MainWindow()
         {
             InitializeComponent();
+            lineI.DataPointStyle = GetNewDataPointStyle(255, 0, 0);
+            backgroundWorker = (BackgroundWorker)FindResource("backgroundWorker");
         }
 
         private static Style GetNewDataPointStyle(byte r, byte g, byte b)
@@ -56,12 +63,6 @@ namespace MathematicalEpidemiology
         {
             try
             {
-                //LineSeries lineI = new LineSeries();
-                lineI.Title = "Infected";
-                lineI.DependentValuePath = "Time";
-                lineI.DependentValuePath = "Value";
-                lineI.DataPointStyle = GetNewDataPointStyle(255, 0, 0);
-
                 parameters.InfectionRate = double.Parse(inputInfectionRate.Text);
                 parameters.RecoveryRate = double.Parse(inputRecoveryRate.Text);
                 parameters.BirthRate = double.Parse(inputBirthRate.Text);
@@ -69,21 +70,42 @@ namespace MathematicalEpidemiology
                 state.Infected = double.Parse(inputInfected.Text);
                 state.Susceptible = double.Parse(inputSusceptible.Text);
                 state.Removed = parameters.Population - state.Infected - state.Susceptible;
-                
-                ObservableCollection<ChartPoint> chartDataI = new ObservableCollection<ChartPoint>();
+
                 model = new DeterministicSIR(state, parameters,
                     double.Parse(inputTime.Text), double.Parse(inputTimeStep.Text));
-                double[,] solution = model.Run();
-                for (int i = 0; i < solution.Length / 4; i++)
-                {
-                    chartDataI.Add(new ChartPoint(solution[i, 0], solution[i, 2]));
-                }
-                lineI.ItemsSource = chartDataI;
+                progressBar.Value = 0;
+                lblStatus.Text = "Busy";
+                backgroundWorker.RunWorkerAsync();
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
+        }
+
+        ObservableCollection<ChartPoint> chartDataI;
+
+        private void BackgroundWorker_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
+        {
+            solution = model.Run();
+            chartDataI = new ObservableCollection<ChartPoint>();
+            backgroundWorker.ReportProgress(50);
+            for (int i = 0; i < solution.Length / 4; i++)
+            {
+                chartDataI.Add(new ChartPoint(solution[i, 0], solution[i, 2]));
+            }
+            backgroundWorker.ReportProgress(100);
+        }
+
+        private void BackgroundWorker_ProgressChanged(object sender, System.ComponentModel.ProgressChangedEventArgs e)
+        {
+            progressBar.Value = e.ProgressPercentage;
+        }
+
+        private void BackgroundWorker_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
+        {
+            lineI.ItemsSource = chartDataI;
+            lblStatus.Text = "Ready";
         }
     }
 }
