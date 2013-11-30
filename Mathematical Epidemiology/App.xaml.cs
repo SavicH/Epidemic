@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace Mathematical_Epidemiology
+namespace MathematicalEpidemiology
 {
     /// <summary>
     /// Interaction logic for App.xaml

@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Mathematical_Epidemiology.Properties {
+namespace MathematicalEpidemiology.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]

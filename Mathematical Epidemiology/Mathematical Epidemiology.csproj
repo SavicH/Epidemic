@@ -7,7 +7,7 @@
     <ProjectGuid>{08BDDB55-B31B-452E-9D71-15ACC2B61A88}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Mathematical_Epidemiology</RootNamespace>
+    <RootNamespace>MathematicalEpidemiology</RootNamespace>
     <AssemblyName>Mathematical Epidemiology</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -93,6 +93,12 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ChartPoint.cs" />
+    <Compile Include="Core\CompartmentModel.cs" />
+    <Compile Include="Core\CompartmentModelException.cs" />
+    <Compile Include="Core\DeterministicSIR.cs" />
+    <Compile Include="Core\Parameters.cs" />
+    <Compile Include="Core\State.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
