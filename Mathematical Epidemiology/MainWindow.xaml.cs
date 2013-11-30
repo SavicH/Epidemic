@@ -24,5 +24,10 @@ namespace Mathematical_Epidemiology
         {
             InitializeComponent();
         }
+
+        private void checkStochastic_Checked_1(object sender, RoutedEventArgs e)
+        {
+            inputPopulation.IsEnabled = !inputPopulation.IsEnabled;
+        }
     }
 }
