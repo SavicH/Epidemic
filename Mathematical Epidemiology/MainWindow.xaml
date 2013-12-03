@@ -88,8 +88,10 @@
                         <TextBlock Grid.Row="1" Grid.ColumnSpan="2" TextAlignment="Center">Parameters</TextBlock>
                         <StackPanel Grid.Row="2" Grid.ColumnSpan="2" >
                             <TextBlock>Type:</TextBlock>
-                            <RadioButton IsChecked="True">SIR</RadioButton>
-                            <RadioButton>SIS</RadioButton>
+                            <RadioButton Tag="0" GroupName="ModelType" Checked="ModelTypes_Checked" Name="rbSIR" IsChecked="True">SIR</RadioButton>
+                            <RadioButton Tag="1" GroupName="ModelType" Checked="ModelTypes_Checked" Name="rbSIS">SIS</RadioButton>
+                            <RadioButton Tag="2" GroupName="ModelType" Checked="ModelTypes_Checked" Name="rbSIRS">SIRS</RadioButton>
+                            <RadioButton Tag="3" GroupName="ModelType" Checked="ModelTypes_Checked" Name="rbSEIR">SEIR</RadioButton>
                         </StackPanel>
                         <TextBlock Grid.Row="3">Stochastic?</TextBlock>
                         <CheckBox Grid.Row="3" Grid.Column="2" Name="checkStochastic"
