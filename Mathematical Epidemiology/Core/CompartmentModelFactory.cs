@@ -15,9 +15,15 @@ namespace MathematicalEpidemiology.Core
             {
                 case CompartmentModelType.SIR:
                     if (isStochastic)
-                        model = null;
+                        model = new StochasticSIR(initialState, parameters, time, timestep);
                     else
                         model = new DeterministicSIR(initialState, parameters, time, timestep);
+                    break;
+                case CompartmentModelType.SIS:
+                    if (isStochastic)
+                        model = new DeterministicSIS(initialState, parameters, time, timestep);
+                    else
+                        model = new DeterministicSIS(initialState, parameters, time, timestep);
                     break;
             }
             return model;
