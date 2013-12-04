@@ -97,8 +97,11 @@
     <Compile Include="Core\CompartmentModel.cs" />
     <Compile Include="Core\CompartmentModelException.cs" />
     <Compile Include="Core\DeterministicSIR.cs" />
+    <Compile Include="Core\DeterministicSIS.cs" />
     <Compile Include="Core\Parameters.cs" />
     <Compile Include="Core\State.cs" />
+    <Compile Include="Core\StochasticSIR.cs" />
+    <Compile Include="Core\StochasticSIS.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
