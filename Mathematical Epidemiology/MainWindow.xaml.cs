@@ -73,7 +73,8 @@ namespace MathematicalEpidemiology
                 parameters.InfectionRate = double.Parse(inputInfectionRate.Text);
                 parameters.RecoveryRate = double.Parse(inputRecoveryRate.Text);
                 parameters.BirthRate = double.Parse(inputBirthRate.Text);
-                parameters.SusceptibleRate = double.Parse(inputSusceptiblerate.Text);
+                parameters.SusceptibleRate = double.Parse(inputSusceptibleRate.Text);
+                parameters.ExposedRate = double.Parse(inputExposedRate.Text);
 
                 state.Infected = double.Parse(inputInfected.Text);
                 state.Susceptible = double.Parse(inputSusceptible.Text);
@@ -105,7 +106,7 @@ namespace MathematicalEpidemiology
             }
             chartDataI = new ObservableCollection<ChartPoint>();
             backgroundWorker.ReportProgress(50);
-            for (int i = 0; i < solution.Length / 4; i++)
+            for (int i = 0; i < solution.Length / (model.CompartmentCount + 1); i++)
             {
                 chartDataI.Add(new ChartPoint(solution[i, 0], solution[i, 2]));
             }

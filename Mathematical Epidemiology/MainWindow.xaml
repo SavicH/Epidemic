@@ -115,7 +115,9 @@
                         <TextBlock Grid.Row="11">Infected</TextBlock>
                         <TextBox Grid.Row="11" Grid.Column="1" Name="inputInfected">0,0001</TextBox>
                         <TextBlock Grid.Row="12">Susceptible rate</TextBlock>
-                        <TextBox Grid.Row="12" Grid.Column="1" Name="inputSusceptiblerate">0,003</TextBox>
+                        <TextBox Grid.Row="12" Grid.Column="1" Name="inputSusceptibleRate">0,003</TextBox>
+                        <TextBlock Grid.Row="13">Exposed rate</TextBlock>
+                        <TextBox Grid.Row="13" Grid.Column="1" Name="inputExposedRate">0,003</TextBox>
                     </Grid>
                 </Grid>
             </TabItem>
