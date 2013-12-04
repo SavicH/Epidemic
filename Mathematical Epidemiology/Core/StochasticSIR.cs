@@ -60,15 +60,12 @@ namespace MathematicalEpidemiology.Core
 
         double[] Probabilities(State state)
         {
-            double beta = 1;
-            double gamma = 0.5;
-            double birth = 0.0;
             double[] a = new double[5];
 
-            a[0] = beta * state.Susceptible * state.Infected / parameters.Population * timestep; // вероятность заболевания
-            a[1] = gamma * state.Infected * timestep; // вероятность выздоровления
-            a[2] = birth * state.Infected * timestep; // рождение восприимчивого, смерть инфицированного
-            a[3] = birth * (parameters.Population - state.Susceptible - state.Infected) * timestep; // вероятность рождения восприимчивого, смерть выздоровевшего
+            a[0] = parameters.InfectionRate * state.Susceptible * state.Infected / parameters.Population * timestep; // вероятность заболевания
+            a[1] = parameters.RecoveryRate * state.Infected * timestep; // вероятность выздоровления
+            a[2] = parameters.BirthRate * state.Infected * timestep; // рождение восприимчивого, смерть инфицированного
+            a[3] = parameters.BirthRate * (parameters.Population - state.Susceptible - state.Infected) * timestep; // вероятность рождения восприимчивого, смерть выздоровевшего
             a[4] = 1 - a[0] - a[1] - a[2] - a[3]; // вероятность того, что ничего не произойдет
             return a;
         }
