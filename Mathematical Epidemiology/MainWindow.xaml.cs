@@ -32,6 +32,8 @@ namespace MathematicalEpidemiology
 
         private double[,] solution;
 
+        CompartmentModelType modelType = 0;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -63,6 +65,11 @@ namespace MathematicalEpidemiology
         {
             try
             {
+                bool isStochastic = checkStochastic.IsChecked == true;
+                if (isStochastic)
+                {
+                    parameters.Population = double.Parse(inputPopulation.Text);
+                }
                 parameters.InfectionRate = double.Parse(inputInfectionRate.Text);
                 parameters.RecoveryRate = double.Parse(inputRecoveryRate.Text);
                 parameters.BirthRate = double.Parse(inputBirthRate.Text);
@@ -71,8 +78,8 @@ namespace MathematicalEpidemiology
                 state.Susceptible = double.Parse(inputSusceptible.Text);
                 state.Removed = parameters.Population - state.Infected - state.Susceptible;
 
-                model = new DeterministicSIR(state, parameters,
-                    double.Parse(inputTime.Text), double.Parse(inputTimeStep.Text));
+                model = CompartmentModelFactory.CreateModel((CompartmentModelType)modelType, isStochastic,
+                    state, parameters, double.Parse(inputTime.Text), double.Parse(inputTimeStep.Text));
                 progressBar.Value = 0;
                 lblStatus.Text = "Busy";
                 backgroundWorker.RunWorkerAsync();
@@ -87,7 +94,14 @@ namespace MathematicalEpidemiology
 
         private void BackgroundWorker_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
         {
-            solution = model.Run();
+            try
+            {
+                solution = model.Run();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
             chartDataI = new ObservableCollection<ChartPoint>();
             backgroundWorker.ReportProgress(50);
             for (int i = 0; i < solution.Length / 4; i++)
@@ -106,6 +120,26 @@ namespace MathematicalEpidemiology
         {
             lineI.ItemsSource = chartDataI;
             lblStatus.Text = "Ready";
+        }
+
+        private void ModelTypes_Checked(object sender, RoutedEventArgs e)
+        {
+            if (rbSIR.IsChecked == true)
+            {
+                modelType = CompartmentModelType.SIR;
+            }
+            else if (rbSIS.IsChecked == true)
+            {
+                modelType = CompartmentModelType.SIS;
+            }
+            else if (rbSEIR.IsChecked == true)
+            {
+                modelType = CompartmentModelType.SEIR;
+            }
+            else if (rbSIRS.IsChecked == true)
+            {
+                modelType = CompartmentModelType.SIRS;
+            }
         }
     }
 }
