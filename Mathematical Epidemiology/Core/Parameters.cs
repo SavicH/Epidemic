@@ -13,5 +13,6 @@ namespace MathematicalEpidemiology.Core
         public double InfectionRate { get; set; }
         public double BirthRate { get; set; }
         public double Population { get { return population; } set { population = value; } }
+        public double SusceptibleRate { get; set; }
     }
 }
