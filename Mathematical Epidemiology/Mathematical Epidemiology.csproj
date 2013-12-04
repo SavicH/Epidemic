@@ -100,6 +100,7 @@
     <Compile Include="Core\CompartmentModelException.cs" />
     <Compile Include="Core\CompartmentModelFactory.cs" />
     <Compile Include="Core\CompartmentModelType.cs" />
+    <Compile Include="Core\DeterministicSEIR.cs" />
     <Compile Include="Core\DeterministicSIR.cs" />
     <Compile Include="Core\DeterministicSIRS.cs" />
     <Compile Include="Core\DeterministicSIS.cs" />

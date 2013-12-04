@@ -31,6 +31,12 @@ namespace MathematicalEpidemiology.Core
                     else
                         model = new DeterministicSIRS(initialState, parameters, time, timestep);
                     break;
+                case CompartmentModelType.SEIR:
+                    if (isStochastic)
+                        break;
+                    else
+                        model = new DeterministicSEIR(initialState, parameters, time, timestep);
+                    break;
             }
             return model;
         }

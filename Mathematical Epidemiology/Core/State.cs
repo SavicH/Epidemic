@@ -10,6 +10,8 @@ namespace MathematicalEpidemiology.Core
         public double Susceptible { get; set; }
         public double Infected { get; set; }
         public double Removed { get; set; }
+        public double Exposed { get; set; }
+
 
         public double Population { get { return Susceptible + Infected + Removed; } }
     }

@@ -15,6 +15,14 @@ namespace MathematicalEpidemiology.Core
         protected double time;
         protected double timestep;
 
+        public int CompartmentCount
+        {
+            get 
+            {
+                return compartmentsCount;
+            }
+        }
+
         public CompartmentModel(State initialState, Parameters parameters, double time, double timestep)
         {
             if (!CheckState(initialState, parameters.Population))
