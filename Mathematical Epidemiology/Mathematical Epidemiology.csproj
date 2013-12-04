@@ -13,7 +13,8 @@
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
-    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -100,10 +101,12 @@
     <Compile Include="Core\CompartmentModelFactory.cs" />
     <Compile Include="Core\CompartmentModelType.cs" />
     <Compile Include="Core\DeterministicSIR.cs" />
+    <Compile Include="Core\DeterministicSIRS.cs" />
     <Compile Include="Core\DeterministicSIS.cs" />
     <Compile Include="Core\Parameters.cs" />
     <Compile Include="Core\State.cs" />
     <Compile Include="Core\StochasticSIR.cs" />
+    <Compile Include="Core\StochasticSIRS.cs" />
     <Compile Include="Core\StochasticSIS.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>

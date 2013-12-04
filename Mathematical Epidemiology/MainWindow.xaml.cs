@@ -73,6 +73,7 @@ namespace MathematicalEpidemiology
                 parameters.InfectionRate = double.Parse(inputInfectionRate.Text);
                 parameters.RecoveryRate = double.Parse(inputRecoveryRate.Text);
                 parameters.BirthRate = double.Parse(inputBirthRate.Text);
+                parameters.SusceptibleRate = double.Parse(inputSusceptiblerate.Text);
 
                 state.Infected = double.Parse(inputInfected.Text);
                 state.Susceptible = double.Parse(inputSusceptible.Text);
