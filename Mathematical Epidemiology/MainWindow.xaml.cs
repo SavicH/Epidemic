@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -32,7 +33,8 @@ namespace MathematicalEpidemiology
 
         private double[,] solution;
 
-        CompartmentModelType modelType = 0;
+        private CompartmentModelType modelType = 0;
+        bool isStochastic = false;
 
         public MainWindow()
         {
@@ -61,20 +63,32 @@ namespace MathematicalEpidemiology
             inputPopulation.IsEnabled = !inputPopulation.IsEnabled;
         }
 
+        private double ParseParameter(string s)
+        {
+            return double.Parse(
+                s.Replace(",", CultureInfo.InvariantCulture.NumberFormat.NumberDecimalSeparator),
+                CultureInfo.InvariantCulture);
+        }
+
+        private void ParseParameters()
+        {
+            isStochastic = checkStochastic.IsChecked == true;
+            if (isStochastic)
+            {
+                parameters.Population = ParseParameter(inputPopulation.Text);
+            }
+            parameters.InfectionRate = ParseParameter(inputInfectionRate.Text);
+            parameters.RecoveryRate = ParseParameter(inputRecoveryRate.Text);
+            parameters.BirthRate = ParseParameter(inputBirthRate.Text);
+            parameters.SusceptibleRate = ParseParameter(inputSusceptibleRate.Text);
+            parameters.ExposedRate = ParseParameter(inputExposedRate.Text);
+        }
+
         private void btnRun_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                bool isStochastic = checkStochastic.IsChecked == true;
-                if (isStochastic)
-                {
-                    parameters.Population = double.Parse(inputPopulation.Text);
-                }
-                parameters.InfectionRate = double.Parse(inputInfectionRate.Text);
-                parameters.RecoveryRate = double.Parse(inputRecoveryRate.Text);
-                parameters.BirthRate = double.Parse(inputBirthRate.Text);
-                parameters.SusceptibleRate = double.Parse(inputSusceptibleRate.Text);
-                parameters.ExposedRate = double.Parse(inputExposedRate.Text);
+                ParseParameters();
 
                 state.Infected = double.Parse(inputInfected.Text);
                 state.Susceptible = double.Parse(inputSusceptible.Text);
@@ -92,7 +106,7 @@ namespace MathematicalEpidemiology
             }
         }
 
-        ObservableCollection<ChartPoint> chartDataI;
+        private ObservableCollection<ChartPoint> chartDataI;
 
         private void BackgroundWorker_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
         {
