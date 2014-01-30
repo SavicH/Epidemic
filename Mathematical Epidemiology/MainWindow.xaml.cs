@@ -38,11 +38,6 @@ namespace MathematicalEpidemiology
             backgroundWorker = (BackgroundWorker)FindResource("backgroundWorker");
         }
 
-        private void checkStochastic_Checked_1(object sender, RoutedEventArgs e)
-        {
-            inputPopulation.IsEnabled = !inputPopulation.IsEnabled;
-        }
-
         private double ParseDoubleInvariantly(string s)
         {
             return double.Parse(
@@ -98,6 +93,9 @@ namespace MathematicalEpidemiology
             }
         }
 
+        private double[] time;
+        private double[] infected;
+
         private void BackgroundWorker_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
         {
             double[,] solution;
@@ -112,39 +110,18 @@ namespace MathematicalEpidemiology
             }
         }
 
-        private int[] days;
-        private double[] infected;
-
         private void CreateChartPoints(double[,] solution)
         {
             backgroundWorker.ReportProgress(50);
             int n = solution.Length / (model.CompartmentCount + 1);
             infected = new double[n];
-            days = new int[n];
+            time = new double[n];
             for (int i = 0; i < n; i++)
             {
-                days[i] = i + 1;
                 infected[i] = solution[i, 2];
+                time[i] = solution[i, 0];
             }
             backgroundWorker.ReportProgress(100);
-        }
-
-        private void UpdateChart()
-        {
-            var daysDataSource = new EnumerableDataSource<int>(days);
-            daysDataSource.SetXMapping(x => x);
-
-            var infectedDataSource = new EnumerableDataSource<double>(infected);
-            infectedDataSource.SetYMapping(y => y);
-
-            CompositeDataSource compositeDataSource1 = new
-                CompositeDataSource(daysDataSource, infectedDataSource);
-
-            plotter.AddLineGraph(compositeDataSource1,
-                new Pen(Brushes.Red, 2),
-                new PenDescription("Infected"));
-
-            plotter.Viewport.FitToView();
         }
 
         private void BackgroundWorker_ProgressChanged(object sender, System.ComponentModel.ProgressChangedEventArgs e)
@@ -156,6 +133,21 @@ namespace MathematicalEpidemiology
         {
             UpdateChart();
             lblStatus.Text = "Ready";
+        }
+
+        private void UpdateChart()
+        {
+            var daysDataSource = new ObservableDataSource<double>(time);
+            daysDataSource.SetXMapping(x => x);
+
+            var infectedDataSource = new ObservableDataSource<double>(infected);
+            infectedDataSource.SetYMapping(y => y);
+
+            CompositeDataSource compositeDataSource1 = new
+                CompositeDataSource(daysDataSource, infectedDataSource);
+
+            infectedChart.DataSource = compositeDataSource1;
+            plotter.Viewport.FitToView();
         }
 
         private void ModelTypes_Checked(object sender, RoutedEventArgs e)
@@ -176,6 +168,21 @@ namespace MathematicalEpidemiology
             {
                 modelType = CompartmentModelType.SIRS;
             }
+        }
+
+        private void checkStochastic_Checked(object sender, RoutedEventArgs e)
+        {
+            inputPopulation.IsEnabled = !inputPopulation.IsEnabled;
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            infectedChart.Description = new PenDescription("Infected");        
+        }
+
+        private void plotter_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            (sender as ChartPlotter).Viewport.FitToView();
         }
     }
 }

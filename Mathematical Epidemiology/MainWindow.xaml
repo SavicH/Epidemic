@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d3="http://research.microsoft.com/DynamicDataDisplay/1.0"
         xmlns:cm="clr-namespace:System.ComponentModel;assembly=System"
-        Title="Mathematical Epidemiology" Height="600" Width="800">
+        Title="Mathematical Epidemiology" Height="600" Width="800" Loaded="Window_Loaded">
 
     <Window.Resources>
         <cm:BackgroundWorker
@@ -51,9 +51,10 @@
                         <ColumnDefinition Width="150"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
 
-                    <d3:ChartPlotter Grid.Column="0" Name="plotter">
+                    <d3:ChartPlotter Grid.Column="0" Name="plotter" MouseDoubleClick="plotter_MouseDoubleClick">
+                                               
                         <d3:ChartPlotter.HorizontalAxis>
-                            <d3:HorizontalIntegerAxis Name="daysAxis"/>
+                            <d3:HorizontalIntegerAxis Name="timeAxis"/>
                         </d3:ChartPlotter.HorizontalAxis>
                         <d3:ChartPlotter.VerticalAxis>
                             <d3:VerticalAxis Name="countAxis"/>
@@ -61,6 +62,12 @@
                         
                         <d3:VerticalAxisTitle FontFamily="Arial" Content="Count"/>
                         <d3:HorizontalAxisTitle FontFamily="Arial" Content="Days"/>
+
+                        <d3:LineGraph Name="infectedChart" Stroke="Red">
+                            <d3:LineGraph.LinePen>
+                                <Pen Brush="Red" Thickness="3"/>
+                            </d3:LineGraph.LinePen>
+                        </d3:LineGraph>
                     </d3:ChartPlotter>
 
                     <GridSplitter Grid.Column="1"  Width="5"
@@ -101,7 +108,7 @@
                         </StackPanel>
                         <TextBlock Grid.Row="3">Stochastic?</TextBlock>
                         <CheckBox Grid.Row="3" Grid.Column="2" Name="checkStochastic"
-                            Checked="checkStochastic_Checked_1" Unchecked="checkStochastic_Checked_1"></CheckBox>
+                            Checked="checkStochastic_Checked" Unchecked="checkStochastic_Checked"></CheckBox>
                         <TextBlock Grid.Row="4">Population</TextBlock>
                         <TextBox Grid.Row="4" Grid.Column="1" Name="inputPopulation" IsEnabled="False">100</TextBox>
                         <TextBlock Grid.Row="5">Birth rate</TextBlock>
