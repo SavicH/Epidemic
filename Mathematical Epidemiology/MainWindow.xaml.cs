@@ -1,4 +1,6 @@
 ﻿using MathematicalEpidemiology.Core;
+using Microsoft.Research.DynamicDataDisplay;
+using Microsoft.Research.DynamicDataDisplay.DataSources;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -9,7 +11,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.DataVisualization.Charting;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -35,22 +36,6 @@ namespace MathematicalEpidemiology
         {
             InitializeComponent();
             backgroundWorker = (BackgroundWorker)FindResource("backgroundWorker");
-            lineI.DataPointStyle = GetNewDataPointStyle(255, 0, 0);
-        }
-
-        private static Style GetNewDataPointStyle(byte r, byte g, byte b)
-        {
-            Color background = Color.FromRgb(r, g, b);
-            Style style = new Style(typeof(DataPoint));
-            Setter st1 = new Setter(DataPoint.BackgroundProperty, new SolidColorBrush(background));
-            Setter st2 = new Setter(DataPoint.BorderBrushProperty, new SolidColorBrush(Colors.White));
-            Setter st3 = new Setter(DataPoint.BorderThicknessProperty, new Thickness(0.1));
-            Setter st4 = new Setter(DataPoint.TemplateProperty, null);
-            style.Setters.Add(st1);
-            style.Setters.Add(st2);
-            style.Setters.Add(st3);
-            style.Setters.Add(st4);
-            return style;
         }
 
         private void checkStochastic_Checked_1(object sender, RoutedEventArgs e)
@@ -113,8 +98,6 @@ namespace MathematicalEpidemiology
             }
         }
 
-        private ObservableCollection<ChartPoint> chartDataI;
-
         private void BackgroundWorker_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
         {
             double[,] solution;
@@ -129,20 +112,39 @@ namespace MathematicalEpidemiology
             }
         }
 
+        private int[] days;
+        private double[] infected;
+
         private void CreateChartPoints(double[,] solution)
         {
-            chartDataI = new ObservableCollection<ChartPoint>();
             backgroundWorker.ReportProgress(50);
-            for (int i = 0; i < solution.Length / (model.CompartmentCount + 1); i++)
+            int n = solution.Length / (model.CompartmentCount + 1);
+            infected = new double[n];
+            days = new int[n];
+            for (int i = 0; i < n; i++)
             {
-                chartDataI.Add(new ChartPoint(solution[i, 0], solution[i, 2]));
+                days[i] = i + 1;
+                infected[i] = solution[i, 2];
             }
             backgroundWorker.ReportProgress(100);
         }
 
         private void UpdateChart()
         {
-            lineI.ItemsSource = chartDataI;
+            var daysDataSource = new EnumerableDataSource<int>(days);
+            daysDataSource.SetXMapping(x => x);
+
+            var infectedDataSource = new EnumerableDataSource<double>(infected);
+            infectedDataSource.SetYMapping(y => y);
+
+            CompositeDataSource compositeDataSource1 = new
+                CompositeDataSource(daysDataSource, infectedDataSource);
+
+            plotter.AddLineGraph(compositeDataSource1,
+                new Pen(Brushes.Red, 2),
+                new PenDescription("Infected"));
+
+            plotter.Viewport.FitToView();
         }
 
         private void BackgroundWorker_ProgressChanged(object sender, System.ComponentModel.ProgressChangedEventArgs e)
