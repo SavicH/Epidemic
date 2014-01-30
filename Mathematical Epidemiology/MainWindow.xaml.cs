@@ -26,12 +26,7 @@ namespace MathematicalEpidemiology
     public partial class MainWindow : Window
     {
         private CompartmentModel model;
-        private State state = new State();
-        private Parameters parameters = new Parameters();
-
         private BackgroundWorker backgroundWorker;
-
-        private double[,] solution;
 
         private CompartmentModelType modelType = 0;
         bool isStochastic = false;
@@ -39,8 +34,8 @@ namespace MathematicalEpidemiology
         public MainWindow()
         {
             InitializeComponent();
-            lineI.DataPointStyle = GetNewDataPointStyle(255, 0, 0);
             backgroundWorker = (BackgroundWorker)FindResource("backgroundWorker");
+            lineI.DataPointStyle = GetNewDataPointStyle(255, 0, 0);
         }
 
         private static Style GetNewDataPointStyle(byte r, byte g, byte b)
@@ -63,39 +58,51 @@ namespace MathematicalEpidemiology
             inputPopulation.IsEnabled = !inputPopulation.IsEnabled;
         }
 
-        private double ParseParameter(string s)
+        private double ParseDoubleInvariantly(string s)
         {
             return double.Parse(
                 s.Replace(",", CultureInfo.InvariantCulture.NumberFormat.NumberDecimalSeparator),
                 CultureInfo.InvariantCulture);
         }
 
-        private void ParseParameters()
+        private Parameters ParseParameters()
         {
+            Parameters parameters = new Parameters();
             isStochastic = checkStochastic.IsChecked == true;
             if (isStochastic)
             {
-                parameters.Population = ParseParameter(inputPopulation.Text);
+                parameters.Population = ParseDoubleInvariantly(inputPopulation.Text);
             }
-            parameters.InfectionRate = ParseParameter(inputInfectionRate.Text);
-            parameters.RecoveryRate = ParseParameter(inputRecoveryRate.Text);
-            parameters.BirthRate = ParseParameter(inputBirthRate.Text);
-            parameters.SusceptibleRate = ParseParameter(inputSusceptibleRate.Text);
-            parameters.ExposedRate = ParseParameter(inputExposedRate.Text);
+            parameters.InfectionRate = ParseDoubleInvariantly(inputInfectionRate.Text);
+            parameters.RecoveryRate = ParseDoubleInvariantly(inputRecoveryRate.Text);
+            parameters.BirthRate = ParseDoubleInvariantly(inputBirthRate.Text);
+            parameters.SusceptibleRate = ParseDoubleInvariantly(inputSusceptibleRate.Text);
+            parameters.ExposedRate = ParseDoubleInvariantly(inputExposedRate.Text);
+            return parameters;
+        }
+
+        private State ParseState(Parameters parameters)
+        {
+            State state = new State();
+            state.Infected = ParseDoubleInvariantly(inputInfected.Text);
+            state.Susceptible = ParseDoubleInvariantly(inputSusceptible.Text);
+            state.Removed = parameters.Population - state.Infected - state.Susceptible;
+            return state;
         }
 
         private void btnRun_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                ParseParameters();
-
-                state.Infected = double.Parse(inputInfected.Text);
-                state.Susceptible = double.Parse(inputSusceptible.Text);
-                state.Removed = parameters.Population - state.Infected - state.Susceptible;
-
-                model = CompartmentModelFactory.CreateModel((CompartmentModelType)modelType, isStochastic,
-                    state, parameters, double.Parse(inputTime.Text), double.Parse(inputTimeStep.Text));
+                Parameters parameters = ParseParameters();
+                State state = ParseState(parameters);
+                model = CompartmentModelFactory.CreateModel(
+                    (CompartmentModelType)modelType, 
+                    isStochastic,
+                    state,
+                    parameters,
+                    ParseDoubleInvariantly(inputTime.Text),
+                    ParseDoubleInvariantly(inputTimeStep.Text));
                 progressBar.Value = 0;
                 lblStatus.Text = "Busy";
                 backgroundWorker.RunWorkerAsync();
@@ -110,14 +117,20 @@ namespace MathematicalEpidemiology
 
         private void BackgroundWorker_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
         {
+            double[,] solution;
             try
             {
                 solution = model.Run();
+                CreateChartPoints(solution);
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
+        }
+
+        private void CreateChartPoints(double[,] solution)
+        {
             chartDataI = new ObservableCollection<ChartPoint>();
             backgroundWorker.ReportProgress(50);
             for (int i = 0; i < solution.Length / (model.CompartmentCount + 1); i++)
@@ -127,6 +140,11 @@ namespace MathematicalEpidemiology
             backgroundWorker.ReportProgress(100);
         }
 
+        private void UpdateChart()
+        {
+            lineI.ItemsSource = chartDataI;
+        }
+
         private void BackgroundWorker_ProgressChanged(object sender, System.ComponentModel.ProgressChangedEventArgs e)
         {
             progressBar.Value = e.ProgressPercentage;
@@ -134,7 +152,7 @@ namespace MathematicalEpidemiology
 
         private void BackgroundWorker_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
         {
-            lineI.ItemsSource = chartDataI;
+            UpdateChart();
             lblStatus.Text = "Ready";
         }
 
