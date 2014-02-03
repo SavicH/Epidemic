@@ -1,6 +1,7 @@
 ﻿using MathematicalEpidemiology.Core;
 using Microsoft.Research.DynamicDataDisplay;
 using Microsoft.Research.DynamicDataDisplay.DataSources;
+using Microsoft.Research.DynamicDataDisplay.ViewportRestrictions;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -137,10 +138,10 @@ namespace MathematicalEpidemiology
 
         private void UpdateChart()
         {
-            var daysDataSource = new ObservableDataSource<double>(time);
+            var daysDataSource = new EnumerableDataSource<double>(time);
             daysDataSource.SetXMapping(x => x);
 
-            var infectedDataSource = new ObservableDataSource<double>(infected);
+            var infectedDataSource = new EnumerableDataSource<double>(infected);
             infectedDataSource.SetYMapping(y => y);
 
             CompositeDataSource compositeDataSource1 = new
@@ -177,12 +178,39 @@ namespace MathematicalEpidemiology
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            infectedChart.Description = new PenDescription("Infected");        
+            infectedChart.Description = new PenDescription("Infected");
+            susceptibleChart.Description = new PenDescription("Susceptible");
+
+            plotter.Viewport.AutoFitToView = true;
+            ViewportAxesRangeRestriction restr = new ViewportAxesRangeRestriction();
+            plotter.Viewport.Restrictions.Add(restr);
         }
 
         private void plotter_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             (sender as ChartPlotter).Viewport.FitToView();
         }
+
+        public class ViewportAxesRangeRestriction : IViewportRestriction
+        {
+
+            public Rect Apply(Rect oldVisible, Rect newVisible, Viewport2D viewport)
+            {
+                if (newVisible.X < 0)
+                {
+                    newVisible.X = 0;
+                }
+
+                if (newVisible.Y < 0)
+                {
+                    newVisible.Y = 0;
+                }
+
+                return newVisible;
+            }
+
+            public event EventHandler Changed;
+        }
+ 
     }
 }
