@@ -57,11 +57,11 @@ namespace MathematicalEpidemiology.Core
 
         double[] Probabilities(State state)
         {
-            double[] a = new double[5];
+            double[] a = new double[3];
 
             a[0] = parameters.InfectionRate * state.Susceptible * state.Infected / parameters.Population * timestep; // вероятность заболевания
             a[1] = (parameters.BirthRate + parameters.RecoveryRate) * state.Infected * timestep; // вероятность выздоровления
-            a[3] = 1 - a[0] - a[1] - a[2]; // вероятность того, что ничего не произойдет
+            a[2] = 1 - a[0] - a[1]; // вероятность того, что ничего не произойдет
             return a;
         }
 
