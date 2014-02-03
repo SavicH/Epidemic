@@ -96,6 +96,7 @@ namespace MathematicalEpidemiology
 
         private double[] time;
         private double[] infected;
+        private double[] susceptible;
 
         private void BackgroundWorker_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
         {
@@ -116,10 +117,12 @@ namespace MathematicalEpidemiology
             backgroundWorker.ReportProgress(50);
             int n = solution.Length / (model.CompartmentCount + 1);
             infected = new double[n];
+            susceptible = new double[n];
             time = new double[n];
             for (int i = 0; i < n; i++)
             {
                 infected[i] = solution[i, 2];
+                susceptible[i] = solution[i, 1];
                 time[i] = solution[i, 0];
             }
             backgroundWorker.ReportProgress(100);
@@ -144,10 +147,17 @@ namespace MathematicalEpidemiology
             var infectedDataSource = new EnumerableDataSource<double>(infected);
             infectedDataSource.SetYMapping(y => y);
 
-            CompositeDataSource compositeDataSource1 = new
+            var susceptibleDataSource = new EnumerableDataSource<double>(susceptible);
+            susceptibleDataSource.SetYMapping(y => y);
+
+            CompositeDataSource compositeInfectedDataSource = new
                 CompositeDataSource(daysDataSource, infectedDataSource);
 
-            infectedChart.DataSource = compositeDataSource1;
+             CompositeDataSource compositeSusceptibleDataSource = new
+                CompositeDataSource(daysDataSource, susceptibleDataSource);
+
+            infectedChart.DataSource = compositeInfectedDataSource;
+            susceptibleChart.DataSource = compositeSusceptibleDataSource;
             plotter.Viewport.FitToView();
         }
 
@@ -210,6 +220,24 @@ namespace MathematicalEpidemiology
             }
 
             public event EventHandler Changed;
+        }
+
+        private void btnAllCharts_Click(object sender, RoutedEventArgs e)
+        {
+            susceptibleChart.Visibility = Visibility.Visible;
+            infectedChart.Visibility = Visibility.Visible;
+        }
+
+        private void CheckBox_Checked_1(object sender, RoutedEventArgs e)
+        {
+            infectedChart.Visibility = infectedChart.Visibility == Visibility.Visible ? Visibility.Hidden : Visibility.Visible;
+            plotter.Viewport.FitToView();
+        }
+
+        private void CheckBox_Checked_2(object sender, RoutedEventArgs e)
+        {
+            susceptibleChart.Visibility = susceptibleChart.Visibility == Visibility.Visible ? Visibility.Hidden : Visibility.Visible;
+            plotter.Viewport.FitToView();
         }
  
     }
