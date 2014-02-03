@@ -97,6 +97,7 @@ namespace MathematicalEpidemiology
         private double[] time;
         private double[] infected;
         private double[] susceptible;
+        private double[] recovered;
 
         private void BackgroundWorker_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
         {
@@ -118,11 +119,13 @@ namespace MathematicalEpidemiology
             int n = solution.Length / (model.CompartmentCount + 1);
             infected = new double[n];
             susceptible = new double[n];
+            recovered = new double[n];
             time = new double[n];
             for (int i = 0; i < n; i++)
             {
                 infected[i] = solution[i, 2];
                 susceptible[i] = solution[i, 1];
+                recovered[i] = solution[i, 3];
                 time[i] = solution[i, 0];
             }
             backgroundWorker.ReportProgress(100);
@@ -150,14 +153,21 @@ namespace MathematicalEpidemiology
             var susceptibleDataSource = new EnumerableDataSource<double>(susceptible);
             susceptibleDataSource.SetYMapping(y => y);
 
+            var recoveredDataSource = new EnumerableDataSource<double>(recovered);
+            recoveredDataSource.SetYMapping(y => y);
+
             CompositeDataSource compositeInfectedDataSource = new
                 CompositeDataSource(daysDataSource, infectedDataSource);
 
              CompositeDataSource compositeSusceptibleDataSource = new
                 CompositeDataSource(daysDataSource, susceptibleDataSource);
 
+             CompositeDataSource compositeRecoveredDataSource = new
+                CompositeDataSource(daysDataSource, recoveredDataSource);
+
             infectedChart.DataSource = compositeInfectedDataSource;
             susceptibleChart.DataSource = compositeSusceptibleDataSource;
+            recoveredChart.DataSource = compositeRecoveredDataSource;
             plotter.Viewport.FitToView();
         }
 
@@ -190,6 +200,7 @@ namespace MathematicalEpidemiology
         {
             infectedChart.Description = new PenDescription("Infected");
             susceptibleChart.Description = new PenDescription("Susceptible");
+            recoveredChart.Description = new PenDescription("Recovered");
 
             plotter.Viewport.AutoFitToView = true;
             ViewportAxesRangeRestriction restr = new ViewportAxesRangeRestriction();
@@ -226,6 +237,7 @@ namespace MathematicalEpidemiology
         {
             susceptibleChart.Visibility = Visibility.Visible;
             infectedChart.Visibility = Visibility.Visible;
+            recoveredChart.Visibility = Visibility.Visible;
         }
 
         private void CheckBox_Checked_1(object sender, RoutedEventArgs e)
@@ -237,6 +249,12 @@ namespace MathematicalEpidemiology
         private void CheckBox_Checked_2(object sender, RoutedEventArgs e)
         {
             susceptibleChart.Visibility = susceptibleChart.Visibility == Visibility.Visible ? Visibility.Hidden : Visibility.Visible;
+            plotter.Viewport.FitToView();
+        }
+
+        private void CheckBox_Checked_3(object sender, RoutedEventArgs e)
+        {
+            recoveredChart.Visibility = recoveredChart.Visibility == Visibility.Visible ? Visibility.Hidden : Visibility.Visible;
             plotter.Viewport.FitToView();
         }
  
