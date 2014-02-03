@@ -125,7 +125,10 @@ namespace MathematicalEpidemiology
             {
                 infected[i] = solution[i, 2];
                 susceptible[i] = solution[i, 1];
-                recovered[i] = solution[i, 3];
+                if (model.CompartmentCount > 2)
+                {
+                    recovered[i] = solution[i, 3];
+                }
                 time[i] = solution[i, 0];
             }
             backgroundWorker.ReportProgress(100);
@@ -180,6 +183,7 @@ namespace MathematicalEpidemiology
             else if (rbSIS.IsChecked == true)
             {
                 modelType = CompartmentModelType.SIS;
+
             }
             else if (rbSEIR.IsChecked == true)
             {
