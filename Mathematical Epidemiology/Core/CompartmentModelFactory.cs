@@ -33,7 +33,7 @@ namespace MathematicalEpidemiology.Core
                     break;
                 case CompartmentModelType.SEIR:
                     if (isStochastic)
-                        break;
+                        model = new StochasticSEIR(initialState, parameters, time, timestep);
                     else
                         model = new DeterministicSEIR(initialState, parameters, time, timestep);
                     break;

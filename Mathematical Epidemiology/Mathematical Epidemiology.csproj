@@ -81,6 +81,7 @@
     <Compile Include="Core\DeterministicSIS.cs" />
     <Compile Include="Core\Parameters.cs" />
     <Compile Include="Core\State.cs" />
+    <Compile Include="Core\StochasticSEIR.cs" />
     <Compile Include="Core\StochasticSIR.cs" />
     <Compile Include="Core\StochasticSIRS.cs" />
     <Compile Include="Core\StochasticSIS.cs" />
