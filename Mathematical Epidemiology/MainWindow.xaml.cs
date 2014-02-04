@@ -194,6 +194,22 @@ namespace MathematicalEpidemiology
         private void checkStochastic_Checked(object sender, RoutedEventArgs e)
         {
             inputPopulation.IsEnabled = !inputPopulation.IsEnabled;
+            try
+            {
+                double infected = ParseDoubleInvariantly(inputInfected.Text);
+                double susceptible = ParseDoubleInvariantly(inputSusceptible.Text);
+                double population = ParseDoubleInvariantly(inputPopulation.Text);
+                inputInfected.Text = checkStochastic.IsChecked == true ? 
+                    Math.Round(infected * population).ToString() :
+                    Math.Round(infected / population, 5).ToString();
+                inputSusceptible.Text = checkStochastic.IsChecked == true ?
+                    Math.Round(susceptible * population).ToString() :
+                    Math.Round(susceptible / population, 5).ToString();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Automatic modification failed");
+            }
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
