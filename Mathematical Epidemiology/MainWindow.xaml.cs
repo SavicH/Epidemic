@@ -1,24 +1,13 @@
-﻿using MathematicalEpidemiology.Core;
-using Microsoft.Research.DynamicDataDisplay;
+﻿using Microsoft.Research.DynamicDataDisplay;
 using Microsoft.Research.DynamicDataDisplay.DataSources;
 using Microsoft.Research.DynamicDataDisplay.ViewportRestrictions;
 using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+
+using AnalyticModels;
 
 namespace MathematicalEpidemiology
 {
@@ -198,6 +187,22 @@ namespace MathematicalEpidemiology
         private void checkStochastic_Checked(object sender, RoutedEventArgs e)
         {
             inputPopulation.IsEnabled = !inputPopulation.IsEnabled;
+            try
+            {
+                double infected = ParseDoubleInvariantly(inputInfected.Text);
+                double susceptible = ParseDoubleInvariantly(inputSusceptible.Text);
+                double population = ParseDoubleInvariantly(inputPopulation.Text);
+                inputInfected.Text = checkStochastic.IsChecked == true ?
+                    Math.Round(infected * population).ToString() :
+                    Math.Round(infected / population, 5).ToString();
+                inputSusceptible.Text = checkStochastic.IsChecked == true ?
+                    Math.Round(susceptible * population).ToString() :
+                    Math.Round(susceptible / population, 5).ToString();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Automatic modification failed");
+            }
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)

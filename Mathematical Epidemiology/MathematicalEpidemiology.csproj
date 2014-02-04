@@ -37,9 +37,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DotNumerics">
-      <HintPath>libs\DotNumerics.dll</HintPath>
-    </Reference>
     <Reference Include="DynamicDataDisplay">
       <HintPath>libs\DynamicDataDisplay.dll</HintPath>
     </Reference>
@@ -70,21 +67,6 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ChartPoint.cs" />
-    <Compile Include="Core\CompartmentModel.cs" />
-    <Compile Include="Core\CompartmentModelException.cs" />
-    <Compile Include="Core\CompartmentModelFactory.cs" />
-    <Compile Include="Core\CompartmentModelType.cs" />
-    <Compile Include="Core\DeterministicSEIR.cs" />
-    <Compile Include="Core\DeterministicSIR.cs" />
-    <Compile Include="Core\DeterministicSIRS.cs" />
-    <Compile Include="Core\DeterministicSIS.cs" />
-    <Compile Include="Core\Parameters.cs" />
-    <Compile Include="Core\State.cs" />
-    <Compile Include="Core\StochasticSEIR.cs" />
-    <Compile Include="Core\StochasticSIR.cs" />
-    <Compile Include="Core\StochasticSIRS.cs" />
-    <Compile Include="Core\StochasticSIS.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -116,6 +98,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Analytic models\AnalyticModels.csproj">
+      <Project>{f8ebce24-1095-48a9-a0dd-f35a284c5fbc}</Project>
+      <Name>AnalyticModels</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

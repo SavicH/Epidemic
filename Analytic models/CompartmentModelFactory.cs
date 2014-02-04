@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace MathematicalEpidemiology.Core
+namespace AnalyticModels
 {
-    static class CompartmentModelFactory
+    public static class CompartmentModelFactory
     {
         public static CompartmentModel CreateModel(CompartmentModelType type, bool isStochastic, State initialState,
             Parameters parameters, double time, double timestep)

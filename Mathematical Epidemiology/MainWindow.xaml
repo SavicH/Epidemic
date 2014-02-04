@@ -109,7 +109,6 @@
                         </Grid.RowDefinitions>
 
                         <Button Grid.ColumnSpan="2" Name="btnRun" Click="btnRun_Click">Run</Button>
-                        <TextBlock Grid.Row="1" Grid.ColumnSpan="2" TextAlignment="Center">Parameters</TextBlock>
                         <StackPanel Grid.Row="2" Grid.ColumnSpan="2" >
                             <TextBlock>Type:</TextBlock>
                             <RadioButton Tag="0" GroupName="ModelType" Checked="ModelTypes_Checked" Name="rbSIR" IsChecked="True">SIR</RadioButton>
@@ -118,24 +117,24 @@
                             <RadioButton Tag="3" GroupName="ModelType" Checked="ModelTypes_Checked" Name="rbSEIR">SEIR</RadioButton>
                         </StackPanel>
                         <TextBlock Grid.Row="3">Stochastic?</TextBlock>
-                        <CheckBox Grid.Row="3" Grid.Column="2" Name="checkStochastic"
-                            Checked="checkStochastic_Checked" Unchecked="checkStochastic_Checked"></CheckBox>
+                        <CheckBox Grid.Row="3" Grid.Column="1" Name="checkStochastic"
+                            Checked="checkStochastic_Checked" Unchecked="checkStochastic_Checked" Height="21" VerticalAlignment="Top"></CheckBox>
                         <TextBlock Grid.Row="4">Population</TextBlock>
                         <TextBox Grid.Row="4" Grid.Column="1" Name="inputPopulation" IsEnabled="False">100</TextBox>
                         <TextBlock Grid.Row="5">Birth rate</TextBlock>
                         <TextBox Grid.Row="5" Grid.Column="1" Name="inputBirthRate">0</TextBox>
                         <TextBlock Grid.Row="6">Transition rate</TextBlock>
-                        <TextBox Grid.Row="6" Grid.Column="1" Name="inputInfectionRate">1,5</TextBox>
+                        <TextBox Grid.Row="6" Grid.Column="1" Name="inputInfectionRate">2,0</TextBox>
                         <TextBlock Grid.Row="7">Recovery rate</TextBlock>
                         <TextBox Grid.Row="7" Grid.Column="1" Name="inputRecoveryRate">0,5</TextBox>
                         <TextBlock Grid.Row="8">Time</TextBlock>
-                        <TextBox Grid.Row="8" Grid.Column="1" Name="inputTime">50</TextBox>
+                        <TextBox Grid.Row="8" Grid.Column="1" Name="inputTime">150</TextBox>
                         <TextBlock Grid.Row="9">Time step</TextBlock>
-                        <TextBox Grid.Row="9" Grid.Column="1" Name="inputTimeStep">1</TextBox>
+                        <TextBox Grid.Row="9" Grid.Column="1" Name="inputTimeStep">0,01</TextBox>
                         <TextBlock Grid.Row="10">Susceptible</TextBlock>
                         <TextBox Grid.Row="10" Grid.Column="1"  Name="inputSusceptible">0,3</TextBox>
                         <TextBlock Grid.Row="11">Infected</TextBlock>
-                        <TextBox Grid.Row="11" Grid.Column="1" Name="inputInfected">0,0001</TextBox>
+                        <TextBox Grid.Row="11" Grid.Column="1" Name="inputInfected">0,01</TextBox>
                         <TextBlock Grid.Row="12">Susceptible rate</TextBlock>
                         <TextBox Grid.Row="12" Grid.Column="1" Name="inputSusceptibleRate">0,003</TextBox>
                         <TextBlock Grid.Row="13">Exposed rate</TextBlock>

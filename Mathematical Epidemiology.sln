@@ -1,7 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mathematical Epidemiology", "Mathematical Epidemiology\Mathematical Epidemiology.csproj", "{08BDDB55-B31B-452E-9D71-15ACC2B61A88}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MathematicalEpidemiology", "Mathematical Epidemiology\MathematicalEpidemiology.csproj", "{08BDDB55-B31B-452E-9D71-15ACC2B61A88}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnalyticModels", "Analytic models\AnalyticModels.csproj", "{F8EBCE24-1095-48A9-A0DD-F35A284C5FBC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,6 +15,10 @@ Global
 		{08BDDB55-B31B-452E-9D71-15ACC2B61A88}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{08BDDB55-B31B-452E-9D71-15ACC2B61A88}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{08BDDB55-B31B-452E-9D71-15ACC2B61A88}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F8EBCE24-1095-48A9-A0DD-F35A284C5FBC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F8EBCE24-1095-48A9-A0DD-F35A284C5FBC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F8EBCE24-1095-48A9-A0DD-F35A284C5FBC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F8EBCE24-1095-48A9-A0DD-F35A284C5FBC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace MathematicalEpidemiology.Core
+namespace AnalyticModels
 {
     public sealed class DeterministicSIR : CompartmentModel
     {
