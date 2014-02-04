@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using DotNumerics.ODE;
 
-namespace MathematicalEpidemiology.Core
+namespace AnalyticModels
 {
     class DeterministicSEIR : CompartmentModel
     {

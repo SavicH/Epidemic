@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using DotNumerics.ODE;
 
-namespace MathematicalEpidemiology.Core
+namespace AnalyticModels
 {
     class DeterministicSIS : CompartmentModel
     {
