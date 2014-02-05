@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AnalyticModels
+namespace CompartmentModels.Analytic
 {
-    class StochasticSEIR: CompartmentModel
+    class StochasticSEIR: AnalyticModel
     {
          private Random rand = new Random(DateTime.Now.Millisecond);
 

@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using DotNumerics.ODE;
 
-namespace AnalyticModels
+namespace CompartmentModels.Analytic
 {
-    class DeterministicSIS : CompartmentModel
+    class DeterministicSIS : AnalyticModel
     {
         private OdeExplicitRungeKutta45 ode = new OdeExplicitRungeKutta45();
 

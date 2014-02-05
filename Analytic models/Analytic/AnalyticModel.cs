@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace AnalyticModels
+namespace CompartmentModels.Analytic
 {
-    public abstract class CompartmentModel
+    public abstract class AnalyticModel
     {
         protected State currentState;
         protected Parameters parameters;
@@ -23,11 +23,11 @@ namespace AnalyticModels
             }
         }
 
-        public CompartmentModel(State initialState, Parameters parameters, double time, double timestep)
+        public AnalyticModel(State initialState, Parameters parameters, double time, double timestep)
         {
             if (!CheckState(initialState, parameters.Population))
             {
-                throw new CompartmentModelException();
+                throw new AnalyticModelException();
             }
             currentState = initialState;
             this.parameters = parameters;

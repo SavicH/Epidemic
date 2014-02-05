@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using DotNumerics.ODE;
 
-namespace AnalyticModels
+namespace CompartmentModels.Analytic
 {
-    class DeterministicSIRS: CompartmentModel
+    class DeterministicSIRS: AnalyticModel
     {
          private OdeExplicitRungeKutta45 ode = new OdeExplicitRungeKutta45();
 

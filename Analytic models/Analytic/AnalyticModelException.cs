@@ -4,29 +4,29 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
 
-namespace AnalyticModels
+namespace CompartmentModels.Analytic
 {
-    class CompartmentModelException : Exception
+    class AnalyticModelException : Exception
     {
-        public CompartmentModelException()
+        public AnalyticModelException()
             :base()
         {
 
         }
         
-        public CompartmentModelException(string message)
+        public AnalyticModelException(string message)
             : base(message)
         {
 
         }
         
-        protected CompartmentModelException(SerializationInfo info, StreamingContext context)
+        protected AnalyticModelException(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
 
         }
 
-        public CompartmentModelException(string message, Exception innerException)
+        public AnalyticModelException(string message, Exception innerException)
             :base(message, innerException)
         {
 

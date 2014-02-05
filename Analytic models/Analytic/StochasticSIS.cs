@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace AnalyticModels
+namespace CompartmentModels.Analytic
 {
-    class StochasticSIS : CompartmentModel
+    class StochasticSIS : AnalyticModel
     {
         private Random rand = new Random(DateTime.Now.Millisecond);
 

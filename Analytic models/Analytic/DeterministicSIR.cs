@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace AnalyticModels
+namespace CompartmentModels.Analytic
 {
-    public sealed class DeterministicSIR : CompartmentModel
+    public sealed class DeterministicSIR : AnalyticModel
     {
         private OdeExplicitRungeKutta45 ode = new OdeExplicitRungeKutta45();
 

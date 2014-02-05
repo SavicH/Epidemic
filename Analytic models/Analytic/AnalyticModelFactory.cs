@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace AnalyticModels
+namespace CompartmentModels.Analytic
 {
-    public static class CompartmentModelFactory
+    public static class AnalyticModelFactory
     {
-        public static CompartmentModel CreateModel(CompartmentModelType type, bool isStochastic, State initialState,
+        public static AnalyticModel CreateModel(CompartmentModelType type, bool isStochastic, State initialState,
             Parameters parameters, double time, double timestep)
         {
-            CompartmentModel model = null;
+            AnalyticModel model = null;
             switch (type)
             {
                 case CompartmentModelType.SIR:

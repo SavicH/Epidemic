@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace AnalyticModels
+namespace CompartmentModels
 {
     public struct State
     {
@@ -11,7 +11,6 @@ namespace AnalyticModels
         public double Infected { get; set; }
         public double Removed { get; set; }
         public double Exposed { get; set; }
-
 
         public double Population { get { return Susceptible + Infected + Removed; } }
     }

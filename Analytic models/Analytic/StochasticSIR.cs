@@ -2,15 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
-namespace AnalyticModels
+namespace CompartmentModels.Analytic
 {
-    class StochasticSIRS: CompartmentModel
+    class StochasticSIR : AnalyticModel
     {
         private Random rand = new Random(DateTime.Now.Millisecond);
 
-        public StochasticSIRS(State initialState, Parameters parameters, double time, double timestep)
+        public StochasticSIR(State initialState, Parameters parameters, double time, double timestep)
             : base(initialState, parameters, time, timestep)
         {
             compartmentsCount = 3;
@@ -63,13 +62,15 @@ namespace AnalyticModels
         {
             double[] a = new double[5];
 
-            a[0] = parameters.InfectionRate * state.Susceptible * state.Infected/ parameters.Population * timestep; // вероятность заболевания
+            a[0] = parameters.InfectionRate * state.Susceptible * state.Infected / parameters.Population * timestep; // вероятность заболевания
             a[1] = parameters.RecoveryRate * state.Infected * timestep; // вероятность выздоровления
             a[2] = parameters.BirthRate * state.Infected * timestep; // рождение восприимчивого, смерть инфицированного
-            a[3] = (parameters.BirthRate + parameters.SusceptibleRate)* (parameters.Population - state.Susceptible - state.Infected) * timestep; // вероятность рождения восприимчивого, смерть выздоровевшего
+            a[3] = parameters.BirthRate * (parameters.Population - state.Susceptible - state.Infected) * timestep; // вероятность рождения восприимчивого, смерть выздоровевшего
             a[4] = 1 - a[0] - a[1] - a[2] - a[3]; // вероятность того, что ничего не произойдет
             return a;
         }
+
+
 
     }
 }

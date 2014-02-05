@@ -7,7 +7,8 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Input;
 
-using AnalyticModels;
+using CompartmentModels;
+using CompartmentModels.Analytic;
 
 namespace MathematicalEpidemiology
 {
@@ -16,7 +17,7 @@ namespace MathematicalEpidemiology
     /// </summary>
     public partial class MainWindow : Window
     {
-        private CompartmentModel model;
+        private AnalyticModel model;
         private BackgroundWorker backgroundWorker;
 
         private CompartmentModelType modelType = 0;
@@ -66,7 +67,7 @@ namespace MathematicalEpidemiology
             {
                 Parameters parameters = ParseParameters();
                 State state = ParseState(parameters);
-                model = CompartmentModelFactory.CreateModel(
+                model = AnalyticModelFactory.CreateModel(
                     (CompartmentModelType)modelType, 
                     isStochastic,
                     state,
