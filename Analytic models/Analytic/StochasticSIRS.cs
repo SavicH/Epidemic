@@ -6,17 +6,16 @@ using System.Threading.Tasks;
 
 namespace CompartmentModels.Analytic
 {
-    class StochasticSIRS: AnalyticModel
+    class StochasticSIRS : AnalyticSIR
     {
         private Random rand = new Random(DateTime.Now.Millisecond);
 
         public StochasticSIRS(State initialState, Parameters parameters, double time, double timestep)
             : base(initialState, parameters, time, timestep)
         {
-            compartmentsCount = 3;
         }
 
-        public override double[,] Run()
+        protected override double[,] CreateDoubleArray()
         {
             int rowCount = (int)Math.Round((time / timestep) + 1);
             double[,] result = new double[rowCount, 4];

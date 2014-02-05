@@ -7,6 +7,8 @@ namespace CompartmentModels
 {
     public struct State
     {
+        public double Time { get; set; }
+
         public double Susceptible { get; set; }
         public double Infected { get; set; }
         public double Removed { get; set; }

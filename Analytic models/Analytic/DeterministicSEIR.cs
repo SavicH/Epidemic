@@ -7,17 +7,16 @@ using DotNumerics.ODE;
 
 namespace CompartmentModels.Analytic
 {
-    class DeterministicSEIR : AnalyticModel
+    class DeterministicSEIR : AnalyticSEIR
     {
         private OdeExplicitRungeKutta45 ode = new OdeExplicitRungeKutta45();
 
         public DeterministicSEIR(State initialState, Parameters parameters, double time, double timestep)
             : base(initialState, parameters, time, timestep)
         {
-            compartmentsCount = 4;
         }
 
-        public override double[,] Run()
+        protected override double[,] CreateDoubleArray()
         {
             OdeFunction function = new OdeFunction(ODEs);
             ode.InitializeODEs(function, compartmentsCount);

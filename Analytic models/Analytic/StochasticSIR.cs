@@ -5,17 +5,16 @@ using System.Text;
 
 namespace CompartmentModels.Analytic
 {
-    class StochasticSIR : AnalyticModel
+    class StochasticSIR : AnalyticSIR
     {
         private Random rand = new Random(DateTime.Now.Millisecond);
 
         public StochasticSIR(State initialState, Parameters parameters, double time, double timestep)
             : base(initialState, parameters, time, timestep)
         {
-            compartmentsCount = 3;
         }
 
-        public override double[,] Run()
+        protected override double[,] CreateDoubleArray()
         {
             int rowCount = (int)Math.Round((time / timestep) + 1);
             double[,] result = new double[rowCount, 4];

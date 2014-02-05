@@ -6,17 +6,16 @@ using System.Text;
 
 namespace CompartmentModels.Analytic
 {
-    public sealed class DeterministicSIR : AnalyticModel
+    class DeterministicSIR : AnalyticSIR
     {
         private OdeExplicitRungeKutta45 ode = new OdeExplicitRungeKutta45();
 
         public DeterministicSIR(State initialState, Parameters parameters, double time, double timestep)
             :base(initialState, parameters, time, timestep)
         {
-            compartmentsCount = 3;
         }
 
-        public override double[,] Run()
+        protected override double[,] CreateDoubleArray()
         {
             OdeFunction function = new OdeFunction(ODEs);
             ode.InitializeODEs(function, compartmentsCount);

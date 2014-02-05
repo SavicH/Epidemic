@@ -5,17 +5,16 @@ using System.Text;
 
 namespace CompartmentModels.Analytic
 {
-    class StochasticSIS : AnalyticModel
+    class StochasticSIS : AnalyticSIS
     {
         private Random rand = new Random(DateTime.Now.Millisecond);
 
         public StochasticSIS(State initialState, Parameters parameters, double time, double timestep)
             : base(initialState, parameters, time, timestep)
         {
-            compartmentsCount = 2;
         }
 
-        public override double[,] Run()
+        protected override double[,] CreateDoubleArray()
         {
             int rowCount = (int)Math.Round((time / timestep) + 1);
             double[,] result = new double[rowCount, 3];

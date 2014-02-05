@@ -9,6 +9,7 @@ using System.Windows.Input;
 
 using CompartmentModels;
 using CompartmentModels.Analytic;
+using System.Collections.Generic;
 
 namespace MathematicalEpidemiology
 {
@@ -84,44 +85,19 @@ namespace MathematicalEpidemiology
             }
         }
 
-        private double[] time;
-        private double[] infected;
-        private double[] susceptible;
-        private double[] recovered;
+        private IList<State> solution;
 
         private void BackgroundWorker_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
         {
-            double[,] solution;
             try
             {
-                solution = model.Run();
-                CreateChartPoints(solution);
+                solution = model.Run();;
+                backgroundWorker.ReportProgress(100);
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
-        }
-
-        private void CreateChartPoints(double[,] solution)
-        {
-            backgroundWorker.ReportProgress(50);
-            int n = solution.Length / (model.CompartmentCount + 1);
-            infected = new double[n];
-            susceptible = new double[n];
-            recovered = new double[n];
-            time = new double[n];
-            for (int i = 0; i < n; i++)
-            {
-                infected[i] = solution[i, 2];
-                susceptible[i] = solution[i, 1];
-                if (model.CompartmentCount > 2)
-                {
-                    recovered[i] = solution[i, 3];
-                }
-                time[i] = solution[i, 0];
-            }
-            backgroundWorker.ReportProgress(100);
         }
 
         private void BackgroundWorker_ProgressChanged(object sender, System.ComponentModel.ProgressChangedEventArgs e)
@@ -137,30 +113,19 @@ namespace MathematicalEpidemiology
 
         private void UpdateChart()
         {
-            var daysDataSource = new EnumerableDataSource<double>(time);
-            daysDataSource.SetXMapping(x => x);
+            EnumerableDataSource<State> infectedDataSource = new EnumerableDataSource<State>(solution);
+            infectedDataSource.SetXYMapping(state => new Point(state.Time, state.Infected));
+            infectedChart.DataSource = infectedDataSource;
 
-            var infectedDataSource = new EnumerableDataSource<double>(infected);
-            infectedDataSource.SetYMapping(y => y);
+            EnumerableDataSource<State> susceptibleDataSource = new EnumerableDataSource<State>(solution);
+            susceptibleDataSource.SetXYMapping(state => new Point(state.Time, state.Susceptible));
+            susceptibleChart.DataSource = susceptibleDataSource;
 
-            var susceptibleDataSource = new EnumerableDataSource<double>(susceptible);
-            susceptibleDataSource.SetYMapping(y => y);
+            EnumerableDataSource<State> removedDataSource = new EnumerableDataSource<State>(solution);
+            removedDataSource.SetXYMapping(state => new Point(state.Time, state.Removed));
+            recoveredChart.DataSource = removedDataSource;
 
-            var recoveredDataSource = new EnumerableDataSource<double>(recovered);
-            recoveredDataSource.SetYMapping(y => y);
 
-            CompositeDataSource compositeInfectedDataSource = new
-                CompositeDataSource(daysDataSource, infectedDataSource);
-
-             CompositeDataSource compositeSusceptibleDataSource = new
-                CompositeDataSource(daysDataSource, susceptibleDataSource);
-
-             CompositeDataSource compositeRecoveredDataSource = new
-                CompositeDataSource(daysDataSource, recoveredDataSource);
-
-            infectedChart.DataSource = compositeInfectedDataSource;
-            susceptibleChart.DataSource = compositeSusceptibleDataSource;
-            recoveredChart.DataSource = compositeRecoveredDataSource;
             plotter.Viewport.FitToView();
         }
 
@@ -200,7 +165,7 @@ namespace MathematicalEpidemiology
                     Math.Round(susceptible * population).ToString() :
                     Math.Round(susceptible / population, 5).ToString();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 MessageBox.Show("Automatic modification failed");
             }
