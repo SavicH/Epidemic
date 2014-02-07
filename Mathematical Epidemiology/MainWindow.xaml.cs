@@ -10,6 +10,7 @@ using System.Windows.Input;
 using CompartmentModels;
 using CompartmentModels.Analytic;
 using System.Collections.Generic;
+using System.Windows.Controls;
 
 namespace MathematicalEpidemiology
 {
@@ -129,27 +130,6 @@ namespace MathematicalEpidemiology
             plotter.Viewport.FitToView();
         }
 
-        private void ModelTypes_Checked(object sender, RoutedEventArgs e)
-        {
-            if (rbSIR.IsChecked == true)
-            {
-                modelType = CompartmentModelType.SIR;
-            }
-            else if (rbSIS.IsChecked == true)
-            {
-                modelType = CompartmentModelType.SIS;
-
-            }
-            else if (rbSEIR.IsChecked == true)
-            {
-                modelType = CompartmentModelType.SEIR;
-            }
-            else if (rbSIRS.IsChecked == true)
-            {
-                modelType = CompartmentModelType.SIRS;
-            }
-        }
-
         private void checkStochastic_Checked(object sender, RoutedEventArgs e)
         {
             inputPopulation.IsEnabled = !inputPopulation.IsEnabled;
@@ -231,6 +211,11 @@ namespace MathematicalEpidemiology
         {
             recoveredChart.Visibility = recoveredChart.Visibility == Visibility.Visible ? Visibility.Hidden : Visibility.Visible;
             plotter.Viewport.FitToView();
+        }
+
+        private void ComboBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            modelType = (CompartmentModelType)(sender as ComboBox).SelectedIndex;
         }
  
     }

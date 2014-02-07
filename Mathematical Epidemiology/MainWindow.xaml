@@ -92,7 +92,7 @@
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="auto"></RowDefinition>
-                            <RowDefinition Height="20"></RowDefinition>
+                            <RowDefinition Height="0"></RowDefinition>
                             <RowDefinition Height="auto"></RowDefinition>
                             <RowDefinition Height="20"></RowDefinition>
                             <RowDefinition Height="auto"></RowDefinition>
@@ -109,13 +109,12 @@
                         </Grid.RowDefinitions>
 
                         <Button Grid.ColumnSpan="2" Name="btnRun" Click="btnRun_Click">Run</Button>
-                        <StackPanel Grid.Row="2" Grid.ColumnSpan="2" >
-                            <TextBlock>Type:</TextBlock>
-                            <RadioButton Tag="0" GroupName="ModelType" Checked="ModelTypes_Checked" Name="rbSIR" IsChecked="True">SIR</RadioButton>
-                            <RadioButton Tag="1" GroupName="ModelType" Checked="ModelTypes_Checked" Name="rbSIS">SIS</RadioButton>
-                            <RadioButton Tag="2" GroupName="ModelType" Checked="ModelTypes_Checked" Name="rbSIRS">SIRS</RadioButton>
-                            <RadioButton Tag="3" GroupName="ModelType" Checked="ModelTypes_Checked" Name="rbSEIR">SEIR</RadioButton>
-                        </StackPanel>
+                        <ComboBox Grid.Row="2" Grid.ColumnSpan="2" SelectedIndex="0" SelectionChanged="ComboBox_SelectionChanged" Margin="0,5">
+                            <ComboBoxItem>SIR</ComboBoxItem>
+                            <ComboBoxItem>SIS</ComboBoxItem>
+                            <ComboBoxItem>SIRS</ComboBoxItem>
+                            <ComboBoxItem>SIS</ComboBoxItem>
+                        </ComboBox>
                         <TextBlock Grid.Row="3">Stochastic?</TextBlock>
                         <CheckBox Grid.Row="3" Grid.Column="1" Name="checkStochastic"
                             Checked="checkStochastic_Checked" Unchecked="checkStochastic_Checked" Height="21" VerticalAlignment="Top"></CheckBox>
