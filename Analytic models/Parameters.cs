@@ -5,14 +5,12 @@ using System.Text;
 
 namespace CompartmentModels
 {
-    public class Parameters
+    public struct Parameters
     {
-        private double population = 1;
-
+        public double Population { get; set; }
         public double RecoveryRate { get; set; }
         public double InfectionRate { get; set; }
         public double BirthRate { get; set; }
-        public double Population { get { return population; } set { population = value; } }
         public double SusceptibleRate { get; set; }
         public double ExposedRate { get; set; }
     }

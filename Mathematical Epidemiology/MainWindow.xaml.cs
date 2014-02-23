@@ -42,10 +42,7 @@ namespace MathematicalEpidemiology
         {
             Parameters parameters = new Parameters();
             isStochastic = checkStochastic.IsChecked == true;
-            if (isStochastic)
-            {
-                parameters.Population = ParseDoubleInvariantly(inputPopulation.Text);
-            }
+            parameters.Population = isStochastic ? ParseDoubleInvariantly(inputPopulation.Text) : 1;
             parameters.InfectionRate = ParseDoubleInvariantly(inputInfectionRate.Text);
             parameters.RecoveryRate = ParseDoubleInvariantly(inputRecoveryRate.Text);
             parameters.BirthRate = ParseDoubleInvariantly(inputBirthRate.Text);
