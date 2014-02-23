@@ -14,6 +14,6 @@ namespace CompartmentModels
         public double Removed { get; set; }
         public double Exposed { get; set; }
 
-        public double Population { get { return Susceptible + Infected + Removed; } }
+        public double Population { get { return Susceptible + Infected + Removed + Exposed; } }
     }
 }

@@ -7,25 +7,18 @@ using DotNumerics.ODE;
 
 namespace CompartmentModels.Analytic
 {
-    class DeterministicSIRS: AnalyticSIR
+    class DeterministicSIRS : DeterministicSIR
     {
          private OdeExplicitRungeKutta45 ode = new OdeExplicitRungeKutta45();
 
         public DeterministicSIRS(State initialState, Parameters parameters, double time, double timestep)
             :base(initialState, parameters, time, timestep)
         {
+            compartmentsCount = 3;
+            initialConditions = new double[] { currentState.Susceptible, currentState.Infected, currentState.Removed };
         }
 
-        protected override double[,] CreateDoubleArray()
-        {
-            OdeFunction function = new OdeFunction(ODEs);
-            ode.InitializeODEs(function, compartmentsCount);
-            double[,] solution = ode.Solve(new Double[] {currentState.Susceptible, currentState.Infected, currentState.Removed},
-                0, timestep, time);
-            return solution;
-        }
-
-        private double[] ODEs(double t, double[] y)
+        protected override double[] ODEs(double t, double[] y)
         {
             double S = y[0];
             double I = y[1];

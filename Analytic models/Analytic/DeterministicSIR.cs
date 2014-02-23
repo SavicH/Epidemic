@@ -6,25 +6,24 @@ using System.Text;
 
 namespace CompartmentModels.Analytic
 {
-    class DeterministicSIR : AnalyticSIR
+    class DeterministicSIR : DeterministicModel
     {
         private OdeExplicitRungeKutta45 ode = new OdeExplicitRungeKutta45();
 
         public DeterministicSIR(State initialState, Parameters parameters, double time, double timestep)
             :base(initialState, parameters, time, timestep)
         {
+            compartmentsCount = 3;
+            initialConditions = new double[] { currentState.Susceptible, currentState.Infected, currentState.Removed };
         }
 
-        protected override double[,] CreateDoubleArray()
+        protected override void FillState(ref State state, double[,] solution, int row)
         {
-            OdeFunction function = new OdeFunction(ODEs);
-            ode.InitializeODEs(function, compartmentsCount);
-            double[,] solution = ode.Solve(new Double[] {currentState.Susceptible, currentState.Infected, currentState.Removed},
-                0, timestep, time);
-            return solution;
+            base.FillState(ref state, solution, row);
+            state.Removed = solution[row, 3];
         }
 
-        private double[] ODEs(double t, double[] y)
+        protected override double[] ODEs(double t, double[] y)
         {
             double S = y[0];
             double I = y[1];

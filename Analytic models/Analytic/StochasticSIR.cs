@@ -5,62 +5,29 @@ using System.Text;
 
 namespace CompartmentModels.Analytic
 {
-    class StochasticSIR : AnalyticSIR
+    class StochasticSIR : StochasticModel
     {
-        private Random rand = new Random(DateTime.Now.Millisecond);
-
         public StochasticSIR(State initialState, Parameters parameters, double time, double timestep)
             : base(initialState, parameters, time, timestep)
         {
+            compartmentsCount = 3;
         }
 
-        protected override double[,] CreateDoubleArray()
+        protected override void ChangeState(int which)
         {
-            int rowCount = (int)Math.Round((time / timestep) + 1);
-            double[,] result = new double[rowCount, 4];
-            double currentTime = 0;
-
-            for (int i = 0; i < rowCount; i++)
+            switch (which)
             {
-                result[i, 0] = currentTime;
-                result[i, 1] = currentState.Susceptible;
-                result[i, 2] = currentState.Infected;
-                result[i, 3] = currentState.Removed;
-
-                double[] prob = Probabilities(currentState);
-                currentTime += timestep;
-
-                int which = process(prob);
-                switch (which)
-                {
-                    case 0: currentState.Susceptible--; currentState.Infected++; break;
-                    case 1: currentState.Infected--; currentState.Removed++; break;
-                    case 2: currentState.Susceptible++; currentState.Infected--; break;
-                    case 3: currentState.Susceptible++; currentState.Removed--; break;
-                    case 4: break;
-                }
-
+                case 0: currentState.Susceptible--; currentState.Infected++; break;
+                case 1: currentState.Infected--; currentState.Removed++; break;
+                case 2: currentState.Susceptible++; currentState.Infected--; break;
+                case 3: currentState.Susceptible++; currentState.Removed--; break;
+                case 4: break;
             }
-            return result;
         }
 
-        int process(double[] probs)
-        {           
-            double r = rand.NextDouble();
-            int i = -1;
-            double offset = 0;
-            do
-            {
-                offset += probs[++i];
-            }
-            while (r > offset);
-            return i;
-        }
-
-        double[] Probabilities(State state)
+        protected override double[] Probabilities(State state)
         {
             double[] a = new double[5];
-
             a[0] = parameters.InfectionRate * state.Susceptible * state.Infected / parameters.Population * timestep; // вероятность заболевания
             a[1] = parameters.RecoveryRate * state.Infected * timestep; // вероятность выздоровления
             a[2] = parameters.BirthRate * state.Infected * timestep; // рождение восприимчивого, смерть инфицированного

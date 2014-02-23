@@ -5,62 +5,30 @@ using System.Text;
 
 namespace CompartmentModels.Analytic
 {
-    class StochasticSIS : AnalyticSIS
+    class StochasticSIS : StochasticModel
     {
-        private Random rand = new Random(DateTime.Now.Millisecond);
-
         public StochasticSIS(State initialState, Parameters parameters, double time, double timestep)
             : base(initialState, parameters, time, timestep)
         {
+            compartmentsCount = 2;
         }
 
-        protected override double[,] CreateDoubleArray()
+        protected override void ChangeState(int which)
         {
-            int rowCount = (int)Math.Round((time / timestep) + 1);
-            double[,] result = new double[rowCount, 3];
-            double currentTime = 0;
-
-            for (int i = 0; i < rowCount; i++)
+            switch (which)
             {
-                result[i, 0] = currentTime;
-                result[i, 1] = currentState.Susceptible;
-                result[i, 2] = currentState.Infected;
-
-                double[] prob = Probabilities(currentState);
-                currentTime += timestep;
-
-                int which = process(prob);
-                switch (which)
-                {
-                    case 0: currentState.Susceptible--; currentState.Infected++; break;
-                    case 1: currentState.Infected--; currentState.Susceptible++; break;
-                    case 2: break;
-                }
-
+                case 0: currentState.Susceptible--; currentState.Infected++; break;
+                case 1: currentState.Infected--; currentState.Susceptible++; break;
+                case 2: break;
             }
-            return result;
         }
-
-        int process(double[] probs)
-        {
-            double r = rand.NextDouble();
-            int i = -1;
-            double offset = 0;
-            do
-            {
-                offset += probs[++i];
-            }
-            while (r > offset);
-            return i;
-        }
-
-        double[] Probabilities(State state)
+                
+        protected override double[] Probabilities(State state)
         {
             double[] a = new double[3];
-
-            a[0] = parameters.InfectionRate * state.Susceptible * state.Infected / parameters.Population * timestep; // вероятность заболевания
-            a[1] = (parameters.BirthRate + parameters.RecoveryRate) * state.Infected * timestep; // вероятность выздоровления
-            a[2] = 1 - a[0] - a[1]; // вероятность того, что ничего не произойдет
+            a[0] = parameters.InfectionRate * state.Susceptible * state.Infected / parameters.Population * timestep;
+            a[1] = (parameters.BirthRate + parameters.RecoveryRate) * state.Infected * timestep;
+            a[2] = 1 - a[0] - a[1];
             return a;
         }
 
