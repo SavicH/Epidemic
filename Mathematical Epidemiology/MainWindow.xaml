@@ -106,14 +106,15 @@
                             <RowDefinition Height="auto"></RowDefinition>
                             <RowDefinition Height="auto"></RowDefinition>
                             <RowDefinition Height="auto"></RowDefinition>
+                            <RowDefinition Height="auto"></RowDefinition>
                         </Grid.RowDefinitions>
 
-                        <Button Grid.ColumnSpan="2" Name="btnRun" Click="btnRun_Click">Run</Button>
+                        
                         <ComboBox Grid.Row="2" Grid.ColumnSpan="2" SelectedIndex="0" SelectionChanged="ComboBox_SelectionChanged" Margin="0,5">
                             <ComboBoxItem>SIR</ComboBoxItem>
                             <ComboBoxItem>SIS</ComboBoxItem>
                             <ComboBoxItem>SIRS</ComboBoxItem>
-                            <ComboBoxItem>SIS</ComboBoxItem>
+                            <ComboBoxItem>SEIR</ComboBoxItem>
                         </ComboBox>
                         <TextBlock Grid.Row="3">Stochastic?</TextBlock>
                         <CheckBox Grid.Row="3" Grid.Column="1" Name="checkStochastic"
@@ -127,21 +128,28 @@
                         <TextBlock Grid.Row="7">Recovery rate</TextBlock>
                         <TextBox Grid.Row="7" Grid.Column="1" Name="inputRecoveryRate">0,5</TextBox>
                         <TextBlock Grid.Row="8">Time</TextBlock>
-                        <TextBox Grid.Row="8" Grid.Column="1" Name="inputTime">150</TextBox>
+                        <TextBox Grid.Row="8" Grid.Column="1" Name="inputTime">25</TextBox>
                         <TextBlock Grid.Row="9">Time step</TextBlock>
                         <TextBox Grid.Row="9" Grid.Column="1" Name="inputTimeStep">0,01</TextBox>
                         <TextBlock Grid.Row="10">Susceptible</TextBlock>
-                        <TextBox Grid.Row="10" Grid.Column="1"  Name="inputSusceptible">0,3</TextBox>
+                        <TextBox Grid.Row="10" Grid.Column="1"  Name="inputSusceptible">0,8</TextBox>
                         <TextBlock Grid.Row="11">Infected</TextBlock>
                         <TextBox Grid.Row="11" Grid.Column="1" Name="inputInfected">0,01</TextBox>
                         <TextBlock Grid.Row="12">Susceptible rate</TextBlock>
                         <TextBox Grid.Row="12" Grid.Column="1" Name="inputSusceptibleRate">0,003</TextBox>
                         <TextBlock Grid.Row="13">Exposed rate</TextBlock>
                         <TextBox Grid.Row="13" Grid.Column="1" Name="inputExposedRate">0,003</TextBox>
-                        <CheckBox Grid.Row="14" IsChecked="False" Grid.ColumnSpan="2"  Margin="5,5,0,0" Click="CheckBox_Checked_2">Susceptible</CheckBox>
-                        <CheckBox Grid.Row="15" Grid.ColumnSpan="2" IsChecked="True" Margin="5,25,0,0" Click="CheckBox_Checked_1">Infected</CheckBox>
-                        <CheckBox Grid.Row="16" Grid.ColumnSpan="2" IsChecked="False" Margin="5,45,0,0" Click="CheckBox_Checked_3">Recovered</CheckBox>
-                        <Button Grid.ColumnSpan="2" Grid.Row="17" Margin="0,65,0,0" Name="btnAllCharts" Click="btnAllCharts_Click">Show all charts</Button>
+                        <Grid Grid.Row="14">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto"></RowDefinition>
+                                <RowDefinition Height="auto"></RowDefinition>
+                                <RowDefinition Height="auto"></RowDefinition>
+                            </Grid.RowDefinitions>
+                            <CheckBox Grid.Row="0" IsChecked="False"  Click="CheckBox_Checked_2">Susceptible</CheckBox>
+                            <CheckBox Grid.Row="1" Grid.ColumnSpan="2" IsChecked="True"  Click="CheckBox_Checked_1">Infected</CheckBox>
+                            <CheckBox Grid.Row="2" Grid.ColumnSpan="2" IsChecked="False"  Click="CheckBox_Checked_3">Recovered</CheckBox>
+                        </Grid>
+                        <Button Grid.Row ="17" Grid.ColumnSpan="2" Name="btnRun" Click="btnRun_Click" Margin="0,10,0,0">Run</Button>
                     </Grid>
                 </Grid>
             </TabItem>
