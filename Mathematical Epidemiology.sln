@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MathematicalEpidemiology", "Mathematical Epidemiology\MathematicalEpidemiology.csproj", "{08BDDB55-B31B-452E-9D71-15ACC2B61A88}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CompartmentModels", "Analytic models\CompartmentModels.csproj", "{F8EBCE24-1095-48A9-A0DD-F35A284C5FBC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CompartmentModels", "Compartment models\CompartmentModels.csproj", "{F8EBCE24-1095-48A9-A0DD-F35A284C5FBC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

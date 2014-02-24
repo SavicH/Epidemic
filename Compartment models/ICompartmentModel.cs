@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CompartmentModels
 {
-    interface ICompartmentModel
+    public interface ICompartmentModel
     {
         IList<State> Run();   
     }
