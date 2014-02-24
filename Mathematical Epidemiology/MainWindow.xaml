@@ -54,7 +54,7 @@
                     <d3:ChartPlotter Grid.Column="0" Name="plotter" MouseDoubleClick="plotter_MouseDoubleClick">
                                                
                         <d3:ChartPlotter.HorizontalAxis>
-                            <d3:HorizontalIntegerAxis Name="timeAxis"/>
+                            <d3:HorizontalAxis Name="timeAxis"/>
                         </d3:ChartPlotter.HorizontalAxis>
                         <d3:ChartPlotter.VerticalAxis>
                             <d3:VerticalAxis Name="countAxis"/>
@@ -142,6 +142,8 @@
                         <CheckBox Grid.Row="15" Grid.ColumnSpan="2" IsChecked="True" Margin="5,25,0,0" Click="CheckBox_Checked_1">Infected</CheckBox>
                         <CheckBox Grid.Row="16" Grid.ColumnSpan="2" IsChecked="False" Margin="5,45,0,0" Click="CheckBox_Checked_3">Recovered</CheckBox>
                         <Button Grid.ColumnSpan="2" Grid.Row="17" Margin="0,65,0,0" Name="btnAllCharts" Click="btnAllCharts_Click">Show all charts</Button>
+                        <Button Grid.ColumnSpan="2" Grid.Row="17" Margin="0,65,0,0" Name="btnRunImitationModel" Click="btnRunImitationModel_Click">Run imitation model</Button>
+                        
                     </Grid>
                 </Grid>
             </TabItem>
