@@ -22,13 +22,25 @@ namespace MathematicalEpidemiology
     {
         private IModel model;
         private BackgroundWorker backgroundWorker;
-
         private CompartmentModelType modelType = 0;
+        private int count = 0;
+        private IList<State> solution;
 
         public MainWindow()
         {
             InitializeComponent();
             backgroundWorker = (BackgroundWorker)FindResource("backgroundWorker");
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            infectedChart.Description = new PenDescription("Infected");
+            susceptibleChart.Description = new PenDescription("Susceptible");
+            recoveredChart.Description = new PenDescription("Recovered");
+
+            plotter.Viewport.AutoFitToView = true;
+            ViewportAxesRangeRestriction restr = new ViewportAxesRangeRestriction();
+            plotter.Viewport.Restrictions.Add(restr);
         }
 
         private bool IsStochastic()
@@ -63,8 +75,9 @@ namespace MathematicalEpidemiology
             {
                 Parameters parameters = ParseParameters();
                 State state = ParseState(parameters);
+                count = IsStochastic() ? (int)Utils.ParseDoubleInvariantly(inputCount.Text) : 1;
                 model = AnalyticModelFactory.CreateModel(
-                    (CompartmentModelType)modelType, 
+                    (CompartmentModelType)modelType,
                     IsStochastic(),
                     state,
                     parameters,
@@ -80,13 +93,30 @@ namespace MathematicalEpidemiology
             }
         }
 
-        private IList<State> solution;
-
         private void BackgroundWorker_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
         {
             try
             {
-                solution = model.Run();
+                IList<State> tmp;
+                for (int i = 0; i < count; i++)
+                {
+                    if (i == 0)
+                    {
+                        solution = model.Run();
+                    }
+                    else
+                    {
+                        tmp = model.Run();
+                        for (int j = 0; j < solution.Count; j++)
+                        {
+                            solution[j] += tmp[j];
+                        }
+                    }
+                }
+                for (int j = 0; j < solution.Count; j++)
+                {
+                    solution[j] /= count;
+                }
                 backgroundWorker.ReportProgress(100);
             }
             catch (Exception ex)
@@ -126,6 +156,7 @@ namespace MathematicalEpidemiology
         private void ComboBoxType_SelectionChanged(object sender, RoutedEventArgs e)
         {
             inputPopulation.IsEnabled = IsStochastic();
+            inputCount.IsEnabled = IsStochastic();
             try
             {
                 double infected = Utils.ParseDoubleInvariantly(inputInfected.Text);
@@ -142,17 +173,6 @@ namespace MathematicalEpidemiology
             {
                 MessageBox.Show("Automatic modification failed");
             }
-        }
-
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            infectedChart.Description = new PenDescription("Infected");
-            susceptibleChart.Description = new PenDescription("Susceptible");
-            recoveredChart.Description = new PenDescription("Recovered");
-
-            plotter.Viewport.AutoFitToView = true;
-            ViewportAxesRangeRestriction restr = new ViewportAxesRangeRestriction();
-            plotter.Viewport.Restrictions.Add(restr);
         }
 
         private void plotter_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -198,7 +218,7 @@ namespace MathematicalEpidemiology
             {
                 MessageBox.Show(ex.Message);
             }
-            
+
         }
 
         private void btnHide_Click(object sender, RoutedEventArgs e)
@@ -225,6 +245,6 @@ namespace MathematicalEpidemiology
             }
 
             public event EventHandler Changed;
-        } 
+        }
     }
 }

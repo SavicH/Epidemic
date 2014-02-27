@@ -22,7 +22,7 @@
                 <MenuItem Header="_Close"/>
             </MenuItem>
         </Menu>
-        <StatusBar DockPanel.Dock="Bottom" Height="20">
+        <StatusBar DockPanel.Dock="Bottom" Height="25">
             <StatusBar.ItemsPanel>
                 <ItemsPanelTemplate>
                     <Grid>
@@ -39,7 +39,7 @@
             </StatusBarItem>
             <Separator Grid.Column ="1"></Separator>
             <StatusBarItem Grid.Column ="2" HorizontalContentAlignment="Stretch">
-                <ProgressBar Name="progressBar" Value="0" Height="10"></ProgressBar>
+                <ProgressBar Name="progressBar" Value="100" Height="10"></ProgressBar>
             </StatusBarItem>
         </StatusBar>
         <Grid>
@@ -123,9 +123,9 @@
                     <TextBlock Grid.Row="5">Time step</TextBlock>
                     <TextBox Grid.Row="5" Grid.Column="1" Name="inputTimeStep">0,01</TextBox>
                     <TextBlock Grid.Row="6">Susceptible</TextBlock>
-                    <TextBox Grid.Row="6" Grid.Column="1"  Name="inputSusceptible">0,8</TextBox>
+                    <TextBox Grid.Row="6" Grid.Column="1"  Name="inputSusceptible">80</TextBox>
                     <TextBlock Grid.Row="7">Infected</TextBlock>
-                    <TextBox Grid.Row="7" Grid.Column="1" Name="inputInfected">0,01</TextBox>
+                    <TextBox Grid.Row="7" Grid.Column="1" Name="inputInfected">1</TextBox>
                     <TextBlock Grid.Row="8">Immunitet period</TextBlock>
                     <TextBox Grid.Row="8" Grid.Column="1" Name="inputSusceptibleRate">30</TextBox>
                     <TextBlock Grid.Row="9">Exposed period</TextBlock>
@@ -147,11 +147,17 @@
                 </Grid>
                 
                 <Grid Grid.Row="3" Margin="0,10,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="auto"></RowDefinition>
                         <RowDefinition Height="auto"></RowDefinition>
                     </Grid.RowDefinitions>
-                    <Button Grid.Row="1" Name="btnRun" Click="btnRun_Click">Run</Button>
+                    <TextBlock>Count</TextBlock>
+                    <TextBox Grid.Column="1"  Name="inputCount">1</TextBox>
+                    <Button Grid.Row="1" Name="btnRun" Click="btnRun_Click" Grid.ColumnSpan="2">Run</Button>
                 </Grid>
 
                 <Grid>
