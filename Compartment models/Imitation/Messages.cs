@@ -9,6 +9,7 @@ namespace CompartmentModels.Imitation
     static class Messages
     {
         public static object Time = new object();
-        public static object Infection = new object();
+        public static object LeaveLocation = new object();
+        public static object EnterLocation = new object();
     }
 }
