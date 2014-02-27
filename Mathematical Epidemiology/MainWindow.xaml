@@ -42,117 +42,138 @@
                 <ProgressBar Name="progressBar" Value="0" Height="10"></ProgressBar>
             </StatusBarItem>
         </StatusBar>
-        <TabControl Margin="0,15,0,0">
-            <TabItem Header="Simple">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"></ColumnDefinition>
-                        <ColumnDefinition Width="auto"></ColumnDefinition>
-                        <ColumnDefinition Width="150"></ColumnDefinition>
-                    </Grid.ColumnDefinitions>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="auto"></ColumnDefinition>
+                <ColumnDefinition Width="150"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
 
-                    <d3:ChartPlotter Grid.Column="0" Name="plotter" MouseDoubleClick="plotter_MouseDoubleClick">
-                                               
-                        <d3:ChartPlotter.HorizontalAxis>
-                            <d3:HorizontalAxis Name="timeAxis"/>
-                        </d3:ChartPlotter.HorizontalAxis>
-                        <d3:ChartPlotter.VerticalAxis>
-                            <d3:VerticalAxis Name="countAxis"/>
-                        </d3:ChartPlotter.VerticalAxis>
-                        
-                        <d3:VerticalAxisTitle FontFamily="Arial" Content="Count"/>
-                        <d3:HorizontalAxisTitle FontFamily="Arial" Content="Days"/>
+            <d3:ChartPlotter Grid.Column="0" Name="plotter" MouseDoubleClick="plotter_MouseDoubleClick">
 
-                        <d3:LineGraph Name="infectedChart" Stroke="Red">
-                            <d3:LineGraph.LinePen>
-                                <Pen Brush="Red" Thickness="3"/>
-                            </d3:LineGraph.LinePen>
-                        </d3:LineGraph>
+                <d3:ChartPlotter.HorizontalAxis>
+                    <d3:HorizontalAxis Name="timeAxis"/>
+                </d3:ChartPlotter.HorizontalAxis>
+                <d3:ChartPlotter.VerticalAxis>
+                    <d3:VerticalAxis Name="countAxis"/>
+                </d3:ChartPlotter.VerticalAxis>
 
-                        <d3:LineGraph Name="susceptibleChart" Stroke="Blue" Visibility="Hidden">
-                            <d3:LineGraph.LinePen>
-                                <Pen Brush="Blue" Thickness="3"/>
-                            </d3:LineGraph.LinePen>
-                        </d3:LineGraph>
-                        <d3:LineGraph Name="recoveredChart" Stroke="Green" Visibility="Hidden">
-                            <d3:LineGraph.LinePen>
-                                <Pen Brush="Green" Thickness="3"/>
-                            </d3:LineGraph.LinePen>
-                        </d3:LineGraph>
-                    </d3:ChartPlotter>
+                <d3:VerticalAxisTitle FontFamily="Arial" Content="Count"/>
+                <d3:HorizontalAxisTitle FontFamily="Arial" Content="Days"/>
 
-                    <GridSplitter Grid.Column="1"  Width="5"
+                <d3:LineGraph Name="infectedChart" Stroke="Red">
+                    <d3:LineGraph.LinePen>
+                        <Pen Brush="Red" Thickness="3"/>
+                    </d3:LineGraph.LinePen>
+                </d3:LineGraph>
+
+                <d3:LineGraph Name="susceptibleChart" Stroke="Blue" Visibility="Hidden">
+                    <d3:LineGraph.LinePen>
+                        <Pen Brush="Blue" Thickness="3"/>
+                    </d3:LineGraph.LinePen>
+                </d3:LineGraph>
+                <d3:LineGraph Name="recoveredChart" Stroke="Green" Visibility="Hidden">
+                    <d3:LineGraph.LinePen>
+                        <Pen Brush="Green" Thickness="3"/>
+                    </d3:LineGraph.LinePen>
+                </d3:LineGraph>
+            </d3:ChartPlotter>
+
+            <GridSplitter Grid.Column="1"  Width="5"
                         VerticalAlignment="Stretch" HorizontalAlignment="Center">
-                    </GridSplitter>
+            </GridSplitter>
 
-                    <Grid Grid.Column="2">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="100"></ColumnDefinition>
-                            <ColumnDefinition Width="*"></ColumnDefinition>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="auto"></RowDefinition>
-                            <RowDefinition Height="0"></RowDefinition>
-                            <RowDefinition Height="auto"></RowDefinition>
-                            <RowDefinition Height="20"></RowDefinition>
-                            <RowDefinition Height="auto"></RowDefinition>
-                            <RowDefinition Height="auto"></RowDefinition>
-                            <RowDefinition Height="auto"></RowDefinition>
-                            <RowDefinition Height="auto"></RowDefinition>
-                            <RowDefinition Height="auto"></RowDefinition>
-                            <RowDefinition Height="auto"></RowDefinition>
-                            <RowDefinition Height="auto"></RowDefinition>
-                            <RowDefinition Height="auto"></RowDefinition>
-                            <RowDefinition Height="auto"></RowDefinition>
-                            <RowDefinition Height="auto"></RowDefinition>
-                            <RowDefinition Height="auto"></RowDefinition>
-                            <RowDefinition Height="auto"></RowDefinition>
-                        </Grid.RowDefinitions>
+            <Grid Grid.Column="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"></RowDefinition>
+                    <RowDefinition Height="auto"></RowDefinition>
+                    <RowDefinition Height="auto"></RowDefinition>
+                    <RowDefinition Height="auto"></RowDefinition>
+                </Grid.RowDefinitions>
 
-                        
-                        <ComboBox Grid.Row="2" Grid.ColumnSpan="2" SelectedIndex="0" SelectionChanged="ComboBox_SelectionChanged" Margin="0,5">
-                            <ComboBoxItem>SIR</ComboBoxItem>
-                            <ComboBoxItem>SIS</ComboBoxItem>
-                            <ComboBoxItem>SIRS</ComboBoxItem>
-                            <ComboBoxItem>SEIR</ComboBoxItem>
-                        </ComboBox>
-                        <TextBlock Grid.Row="3">Stochastic?</TextBlock>
-                        <CheckBox Grid.Row="3" Grid.Column="1" Name="checkStochastic"
-                            Checked="checkStochastic_Checked" Unchecked="checkStochastic_Checked" Height="21" VerticalAlignment="Top"></CheckBox>
-                        <TextBlock Grid.Row="4">Population</TextBlock>
-                        <TextBox Grid.Row="4" Grid.Column="1" Name="inputPopulation" IsEnabled="False">100</TextBox>
-                        <TextBlock Grid.Row="5">Birth rate</TextBlock>
-                        <TextBox Grid.Row="5" Grid.Column="1" Name="inputBirthRate">0</TextBox>
-                        <TextBlock Grid.Row="6">Transition rate</TextBlock>
-                        <TextBox Grid.Row="6" Grid.Column="1" Name="inputInfectionRate">2,0</TextBox>
-                        <TextBlock Grid.Row="7">Recovery rate</TextBlock>
-                        <TextBox Grid.Row="7" Grid.Column="1" Name="inputRecoveryRate">0,5</TextBox>
-                        <TextBlock Grid.Row="8">Time</TextBlock>
-                        <TextBox Grid.Row="8" Grid.Column="1" Name="inputTime">25</TextBox>
-                        <TextBlock Grid.Row="9">Time step</TextBlock>
-                        <TextBox Grid.Row="9" Grid.Column="1" Name="inputTimeStep">0,01</TextBox>
-                        <TextBlock Grid.Row="10">Susceptible</TextBlock>
-                        <TextBox Grid.Row="10" Grid.Column="1"  Name="inputSusceptible">0,8</TextBox>
-                        <TextBlock Grid.Row="11">Infected</TextBlock>
-                        <TextBox Grid.Row="11" Grid.Column="1" Name="inputInfected">0,01</TextBox>
-                        <TextBlock Grid.Row="12">Susceptible rate</TextBlock>
-                        <TextBox Grid.Row="12" Grid.Column="1" Name="inputSusceptibleRate">0,003</TextBox>
-                        <TextBlock Grid.Row="13">Exposed rate</TextBlock>
-                        <TextBox Grid.Row="13" Grid.Column="1" Name="inputExposedRate">0,003</TextBox>
-                        <Grid Grid.Row="14">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="auto"></RowDefinition>
-                                <RowDefinition Height="auto"></RowDefinition>
-                                <RowDefinition Height="auto"></RowDefinition>
-                            </Grid.RowDefinitions>
-                            <CheckBox Grid.Row="0" IsChecked="False"  Click="CheckBox_Checked_2">Susceptible</CheckBox>
-                            <CheckBox Grid.Row="1" Grid.ColumnSpan="2" IsChecked="True"  Click="CheckBox_Checked_1">Infected</CheckBox>
-                            <CheckBox Grid.Row="2" Grid.ColumnSpan="2" IsChecked="False"  Click="CheckBox_Checked_3">Recovered</CheckBox>
-                        </Grid>
-                        <Button Grid.Row ="17" Grid.ColumnSpan="2" Name="btnRun" Click="btnRun_Click" Margin="0,10,0,0">Run</Button>
-                    </Grid>
+                <Grid Grid.Row="1" Margin="0,10,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="100"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"></RowDefinition>
+                        <RowDefinition Height="auto"></RowDefinition>
+                        <RowDefinition Height="auto"></RowDefinition>
+                        <RowDefinition Height="auto"></RowDefinition>
+                        <RowDefinition Height="auto"></RowDefinition>
+                        <RowDefinition Height="auto"></RowDefinition>
+                        <RowDefinition Height="auto"></RowDefinition>
+                        <RowDefinition Height="auto"></RowDefinition>
+                        <RowDefinition Height="auto"></RowDefinition>
+                        <RowDefinition Height="auto"></RowDefinition>
+                        <RowDefinition Height="auto"></RowDefinition>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0">Population</TextBlock>
+                    <TextBox Grid.Row="0" Grid.Column="1" Name="inputPopulation" IsEnabled="False">100</TextBox>
+                    <TextBlock Grid.Row="1">Birth rate</TextBlock>
+                    <TextBox Grid.Row="1" Grid.Column="1" Name="inputBirthRate">0</TextBox>
+                    <TextBlock Grid.Row="2">Transition rate</TextBlock>
+                    <TextBox Grid.Row="2" Grid.Column="1" Name="inputInfectionRate">2,0</TextBox>
+                    <TextBlock Grid.Row="3">Desease period</TextBlock>
+                    <TextBox Grid.Row="3" Grid.Column="1" Name="inputRecoveryRate">2,0</TextBox>
+                    <TextBlock Grid.Row="4">Time</TextBlock>
+                    <TextBox Grid.Row="4" Grid.Column="1" Name="inputTime">25</TextBox>
+                    <TextBlock Grid.Row="5">Time step</TextBlock>
+                    <TextBox Grid.Row="5" Grid.Column="1" Name="inputTimeStep">0,01</TextBox>
+                    <TextBlock Grid.Row="6">Susceptible</TextBlock>
+                    <TextBox Grid.Row="6" Grid.Column="1"  Name="inputSusceptible">0,8</TextBox>
+                    <TextBlock Grid.Row="7">Infected</TextBlock>
+                    <TextBox Grid.Row="7" Grid.Column="1" Name="inputInfected">0,01</TextBox>
+                    <TextBlock Grid.Row="8">Immunitet period</TextBlock>
+                    <TextBox Grid.Row="8" Grid.Column="1" Name="inputSusceptibleRate">30</TextBox>
+                    <TextBlock Grid.Row="9">Exposed period</TextBlock>
+                    <TextBox Grid.Row="9" Grid.Column="1" Name="inputExposedRate">30</TextBox>
                 </Grid>
-            </TabItem>
-        </TabControl>
+
+                <Grid Grid.Row="2" Margin="0,10,0,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"></RowDefinition>
+                        <RowDefinition Height="auto"></RowDefinition>
+                        <RowDefinition Height="auto"></RowDefinition>
+                        <RowDefinition Height="auto"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    
+                    <CheckBox Grid.Row="0" IsChecked="False"  Click="CheckBox_Checked_2">Susceptible</CheckBox>
+                    <CheckBox Grid.Row="1" Grid.ColumnSpan="2" IsChecked="True"  Click="CheckBox_Checked_1">Infected</CheckBox>
+                    <CheckBox Grid.Row="2" Grid.ColumnSpan="2" IsChecked="False"  Click="CheckBox_Checked_3">Recovered</CheckBox>
+                    <Button Grid.Row="3" Name="btnHide" Click="btnHide_Click" Margin="0,4,0,0">Hide</Button>
+                </Grid>
+                
+                <Grid Grid.Row="3" Margin="0,10,0,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"></RowDefinition>
+                        <RowDefinition Height="auto"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Button Grid.Row="1" Name="btnRun" Click="btnRun_Click">Run</Button>
+                </Grid>
+
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                    </Grid.RowDefinitions>
+
+                    <ComboBox SelectedIndex="0">
+                        <ComboBoxItem>SIR</ComboBoxItem>
+                        <ComboBoxItem>SIS</ComboBoxItem>
+                        <ComboBoxItem>SIRS</ComboBoxItem>
+                        <ComboBoxItem>SEIR</ComboBoxItem>
+                    </ComboBox>
+
+                    <ComboBox Grid.Row="1" Name="comboBoxType" SelectedIndex="0" SelectionChanged="ComboBoxType_SelectionChanged">
+                        <ComboBoxItem>Determenistic</ComboBoxItem>
+                        <ComboBoxItem>Stochastic</ComboBoxItem>
+                        <ComboBoxItem>Imitation</ComboBoxItem>
+                    </ComboBox>
+                </Grid>
+            </Grid>
+        </Grid>
     </DockPanel>
 </Window>
