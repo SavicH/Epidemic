@@ -4,10 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CompartmentModels
+namespace CompartmentModels.Imitation
 {
-    interface IModel
+    public enum Compartment
     {
-        IList<State> Run();   
+       Susceptible,
+       Infected,
+       Removed      
     }
 }

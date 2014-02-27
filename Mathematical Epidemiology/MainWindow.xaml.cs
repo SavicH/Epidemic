@@ -11,6 +11,7 @@ using CompartmentModels;
 using CompartmentModels.Analytic;
 using System.Collections.Generic;
 using System.Windows.Controls;
+using CompartmentModels.Imitation;
 
 namespace MathematicalEpidemiology
 {
@@ -19,7 +20,7 @@ namespace MathematicalEpidemiology
     /// </summary>
     public partial class MainWindow : Window
     {
-        private AnalyticModel model;
+        private IModel model;
         private BackgroundWorker backgroundWorker;
 
         private CompartmentModelType modelType = 0;
@@ -89,7 +90,7 @@ namespace MathematicalEpidemiology
         {
             try
             {
-                solution = model.Run();;
+                solution = model.Run();
                 backgroundWorker.ReportProgress(100);
             }
             catch (Exception ex)
@@ -213,6 +214,24 @@ namespace MathematicalEpidemiology
         private void ComboBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
             modelType = (CompartmentModelType)(sender as ComboBox).SelectedIndex;
+        }
+
+        private void btnRunImitationModel_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Parameters parameters = ParseParameters();
+                State state = ParseState(parameters);
+                double time = ParseDoubleInvariantly(inputTime.Text);
+                model = new ImitationModel(state, parameters, time);
+                backgroundWorker.RunWorkerAsync();
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            
         }
  
     }

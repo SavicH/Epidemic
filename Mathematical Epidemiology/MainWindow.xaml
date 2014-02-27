@@ -54,7 +54,7 @@
                     <d3:ChartPlotter Grid.Column="0" Name="plotter" MouseDoubleClick="plotter_MouseDoubleClick">
                                                
                         <d3:ChartPlotter.HorizontalAxis>
-                            <d3:HorizontalIntegerAxis Name="timeAxis"/>
+                            <d3:HorizontalAxis Name="timeAxis"/>
                         </d3:ChartPlotter.HorizontalAxis>
                         <d3:ChartPlotter.VerticalAxis>
                             <d3:VerticalAxis Name="countAxis"/>
