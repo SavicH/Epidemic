@@ -10,7 +10,9 @@ namespace CompartmentModels.Imitation
 {
     class SimpleAgent: UntypedActor
     {
-        private const int rate = 1400; // tmp value
+        private Dictionary<int, ActorRef>  schedule;
+        private const double rate = 1400; // tmp value
+        private double locationRate = 1;
         private static Parameters infectionParameters;
         public static Parameters InfectionParameters
         {
@@ -24,6 +26,7 @@ namespace CompartmentModels.Imitation
         public static Parameters parameters; // TMP
        
         private ActorRef currentLocation;
+        private int currentTime;
         
         public Compartment Compartment { get; private set; }
 
@@ -32,10 +35,12 @@ namespace CompartmentModels.Imitation
 
         private static Random rand = new Random(DateTime.Now.Millisecond);
 
-        public SimpleAgent(ActorRef currentLocation, Compartment compartment, Parameters parameters)
+        public SimpleAgent(ActorRef currentLocation, Compartment compartment, Parameters parameters, Dictionary<int, ActorRef> schedule)
         {
+            this.schedule = schedule;
             SimpleAgent.parameters = parameters;
             this.currentLocation = currentLocation;
+            
             switch (compartment)
             {
                 case Compartment.Susceptible: Become(Susceptible); agentsState.Susceptible++; break;
@@ -46,15 +51,20 @@ namespace CompartmentModels.Imitation
 
         private bool IsInfected()
         {
-           return rand.Next() % (parameters.InfectionRate*rate) == 0;
+           return rand.Next() % (parameters.InfectionRate*rate*locationRate) == 0;
         }
 
         private void Susceptible(object message)
         {
-            if (message == Messages.Infection)
+            if (message == Messages.Time)
+            {
+                ChangeLocation();
+            }
+            if (message is Infection)
             {
                 if (IsInfected())
                 {
+                    locationRate = (message as Infection).Rate;
                     Become(Infected);
                     agentsState.Infected++;
                     agentsState.Susceptible--;
@@ -67,14 +77,28 @@ namespace CompartmentModels.Imitation
         {           
             if (message == Messages.Time)
             {
+                ChangeLocation();
                 if (currentTimeDisease++ == parameters.DiseasePeriodInHours)
                 {
                     Become(Removed);
                     agentsState.Removed++;
                     agentsState.Infected--;
                 }
-                currentLocation.Tell(Messages.Infection);
+                currentLocation.Tell(new Infection());
             }          
+        }
+
+        private void ChangeLocation()
+        {
+            currentTime = (++currentTime) % Parameters.Hours;
+            if (schedule.ContainsKey(currentTime))
+            { 
+                currentLocation.Tell(Messages.LeaveLocation);
+                currentLocation = schedule[currentTime];
+                currentLocation.Tell(Messages.EnterLocation);
+                 
+            }
+          
         }
 
         private void Removed(object message)

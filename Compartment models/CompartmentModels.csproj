@@ -54,6 +54,7 @@
     <Compile Include="Analytic\DeterministicSIR.cs" />
     <Compile Include="Analytic\DeterministicSIRS.cs" />
     <Compile Include="Analytic\DeterministicSIS.cs" />
+    <Compile Include="Imitation\Infection.cs" />
     <Compile Include="IModel.cs" />
     <Compile Include="Imitation\Compartment.cs" />
     <Compile Include="Imitation\ImitationModel.cs" />
