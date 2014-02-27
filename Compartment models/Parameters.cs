@@ -7,6 +7,8 @@ namespace CompartmentModels
 {
     public struct Parameters
     {
+        public const int Hours = 24;
+
         public double Population { get; set; }
         public double RecoveryRate { get; set; }
         public double InfectionRate { get; set; }
@@ -35,6 +37,49 @@ namespace CompartmentModels
                 DiseasePeriod = value / Hours;
             }
         }
-        public const int Hours = 24;
+        public double ExposedPeriod
+        {
+            get
+            {
+                return 1 / ExposedRate;
+            }
+            set
+            {
+                ExposedRate = 1 / value;
+            }
+        }
+        public double ExposedPeriodInHours
+        {
+            get
+            {
+                return ExposedPeriod * Hours;
+            }
+            set
+            {
+                ExposedPeriod = value / Hours;
+            }
+        }
+        public double SusceptiblePeriod
+        {
+            get
+            {
+                return 1 / SusceptibleRate;
+            }
+            set
+            {
+                SusceptibleRate = 1 / value;
+            }
+        }
+        public double SusceptiblePeriodInHours
+        {
+            get
+            {
+                return SusceptiblePeriod * Hours;
+            }
+            set
+            {
+                SusceptiblePeriod = value / Hours;
+            }
+        }
     }
 }
