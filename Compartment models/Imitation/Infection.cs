@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CompartmentModels.Imitation
 {
-    class Infection
+    class Infection : IMessage
     {
         public double Rate{get; private set;}
 

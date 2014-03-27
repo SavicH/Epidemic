@@ -57,11 +57,14 @@
     <Compile Include="Analytic\DeterministicSIR.cs" />
     <Compile Include="Analytic\DeterministicSIRS.cs" />
     <Compile Include="Analytic\DeterministicSIS.cs" />
+    <Compile Include="Imitation\EnterLocation.cs" />
+    <Compile Include="Imitation\IMessage.cs" />
     <Compile Include="Imitation\Infection.cs" />
+    <Compile Include="Imitation\LeaveLocation.cs" />
+    <Compile Include="Imitation\Time.cs" />
     <Compile Include="IModel.cs" />
     <Compile Include="Imitation\Compartment.cs" />
     <Compile Include="Imitation\ImitationModel.cs" />
-    <Compile Include="Imitation\Messages.cs" />
     <Compile Include="Imitation\SimpleAgent.cs" />
     <Compile Include="Imitation\SimpleLocation.cs" />
     <Compile Include="Parameters.cs" />

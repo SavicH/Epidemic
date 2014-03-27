@@ -10,30 +10,32 @@ namespace CompartmentModels.Imitation
 {
     class SimpleLocation : UntypedActor
     {
-        private IList<ActorRef> agents;
+        private List<ActorRef> agents;
         private double rate;
 
         protected override void OnReceive(object message)
         {
             if (message is Infection)
             {
-                foreach (var agent in agents.AsEnumerable())
-                {
-                    agent.Tell(new Infection(rate));
-                }
+                //lock (agents) {
+                    for (int i = 0; i < agents.Count; i++)
+                    {
+                        agents[i].Tell(new Infection(rate));
+                    }
+               // }
             }
 
-            if (message == Messages.LeaveLocation)
+            if (message is LeaveLocation)
             {
                 agents.Remove(Sender);
             }
-            if (message == Messages.EnterLocation)
+            if (message is EnterLocation)
             {
                 agents.Add(Sender);
             }
         }
 
-        public SimpleLocation(IList<ActorRef> agents, double rate)
+        public SimpleLocation(List<ActorRef> agents, double rate)
         {
             this.agents = agents;
             this.rate = rate;
