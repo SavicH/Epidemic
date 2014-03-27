@@ -69,20 +69,34 @@ namespace MathematicalEpidemiology
             return state;
         }
 
+        private int index = 0;
+        private double population;
+
         private void btnRun_Click(object sender, RoutedEventArgs e)
         {
             try
             {
+                index = comboBoxType.SelectedIndex;
+                population = Utils.ParseDoubleInvariantly(inputPopulation.Text);
                 Parameters parameters = ParseParameters();
                 State state = ParseState(parameters);
                 count = IsStochastic() ? (int)Utils.ParseDoubleInvariantly(inputCount.Text) : 1;
-                model = AnalyticModelFactory.CreateModel(
-                    (CompartmentModelType)modelType,
-                    IsStochastic(),
-                    state,
-                    parameters,
-                    Utils.ParseDoubleInvariantly(inputTime.Text),
-                    Utils.ParseDoubleInvariantly(inputTimeStep.Text));
+                double time = Utils.ParseDoubleInvariantly(inputTime.Text);
+                double timestep = Utils.ParseDoubleInvariantly(inputTimeStep.Text);
+                if (comboBoxType.SelectedIndex == 2)
+                {
+                    model = new ImitationModel(state, parameters, time);
+                }
+                else
+                {
+                    model = AnalyticModelFactory.CreateModel(
+                        (CompartmentModelType)modelType,
+                        IsStochastic(),
+                        state,
+                        parameters,
+                        time,
+                        timestep);
+                }
                 progressBar.Value = 0;
                 lblStatus.Text = "Busy";
                 backgroundWorker.RunWorkerAsync();
@@ -116,6 +130,13 @@ namespace MathematicalEpidemiology
                 for (int j = 0; j < solution.Count; j++)
                 {
                     solution[j] /= count;
+                }
+                if (index == 0)
+                {
+                    for (int j = 0; j < solution.Count; j++)
+                    {
+                        solution[j] *= population;
+                    }
                 }
                 backgroundWorker.ReportProgress(100);
             }
@@ -153,25 +174,34 @@ namespace MathematicalEpidemiology
             plotter.Viewport.FitToView();
         }
 
+        private bool isStochasticOld = false;
+
         private void ComboBoxType_SelectionChanged(object sender, RoutedEventArgs e)
         {
-            inputPopulation.IsEnabled = IsStochastic();
+            //inputPopulation.IsEnabled = IsStochastic();
             inputCount.IsEnabled = IsStochastic();
             try
             {
-                double infected = Utils.ParseDoubleInvariantly(inputInfected.Text);
-                double susceptible = Utils.ParseDoubleInvariantly(inputSusceptible.Text);
-                double population = Utils.ParseDoubleInvariantly(inputPopulation.Text);
-                inputInfected.Text = IsStochastic() ?
-                    Math.Round(infected * population).ToString() :
-                    Math.Round(infected / population, 5).ToString();
-                inputSusceptible.Text = IsStochastic() ?
-                    Math.Round(susceptible * population).ToString() :
-                    Math.Round(susceptible / population, 5).ToString();
+                if (isStochasticOld != IsStochastic())
+                {
+                    double infected = Utils.ParseDoubleInvariantly(inputInfected.Text);
+                    double susceptible = Utils.ParseDoubleInvariantly(inputSusceptible.Text);
+                    double population = Utils.ParseDoubleInvariantly(inputPopulation.Text);
+                    inputInfected.Text = IsStochastic() ?
+                        Math.Round(infected * population).ToString() :
+                        Math.Round(infected / population, 5).ToString();
+                    inputSusceptible.Text = IsStochastic() ?
+                        Math.Round(susceptible * population).ToString() :
+                        Math.Round(susceptible / population, 5).ToString();
+                }
             }
             catch (Exception)
             {
                 MessageBox.Show("Automatic modification failed");
+            }
+            finally
+            {
+                isStochasticOld = IsStochastic();
             }
         }
 
@@ -201,24 +231,6 @@ namespace MathematicalEpidemiology
         private void ComboBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
             modelType = (CompartmentModelType)(sender as ComboBox).SelectedIndex;
-        }
-
-        private void btnRunImitationModel_Click(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                Parameters parameters = ParseParameters();
-                State state = ParseState(parameters);
-                double time = Utils.ParseDoubleInvariantly(inputTime.Text);
-                model = new ImitationModel(state, parameters, time);
-                backgroundWorker.RunWorkerAsync();
-
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-
         }
 
         private void btnHide_Click(object sender, RoutedEventArgs e)

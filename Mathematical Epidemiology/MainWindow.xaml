@@ -111,7 +111,7 @@
                     </Grid.RowDefinitions>
 
                     <TextBlock Grid.Row="0">Population</TextBlock>
-                    <TextBox Grid.Row="0" Grid.Column="1" Name="inputPopulation" IsEnabled="False">100</TextBox>
+                    <TextBox Grid.Row="0" Grid.Column="1" Name="inputPopulation" IsEnabled="True">100</TextBox>
                     <TextBlock Grid.Row="1">Birth rate</TextBlock>
                     <TextBox Grid.Row="1" Grid.Column="1" Name="inputBirthRate">0</TextBox>
                     <TextBlock Grid.Row="2">Transition rate</TextBlock>
@@ -123,9 +123,9 @@
                     <TextBlock Grid.Row="5">Time step</TextBlock>
                     <TextBox Grid.Row="5" Grid.Column="1" Name="inputTimeStep">0,01</TextBox>
                     <TextBlock Grid.Row="6">Susceptible</TextBlock>
-                    <TextBox Grid.Row="6" Grid.Column="1"  Name="inputSusceptible">80</TextBox>
+                    <TextBox Grid.Row="6" Grid.Column="1"  Name="inputSusceptible">0.80</TextBox>
                     <TextBlock Grid.Row="7">Infected</TextBlock>
-                    <TextBox Grid.Row="7" Grid.Column="1" Name="inputInfected">1</TextBox>
+                    <TextBox Grid.Row="7" Grid.Column="1" Name="inputInfected">0,01</TextBox>
                     <TextBlock Grid.Row="8">Immunitet period</TextBlock>
                     <TextBox Grid.Row="8" Grid.Column="1" Name="inputSusceptibleRate">30</TextBox>
                     <TextBlock Grid.Row="9">Exposed period</TextBlock>

@@ -27,7 +27,7 @@ namespace CompartmentModels
             return c;
         }
 
-        public static State operator /(State s, int x)
+        public static State operator /(State s, double x)
         {
             State c = new State();
             c.Time = s.Time;
@@ -35,6 +35,17 @@ namespace CompartmentModels
             c.Infected = s.Infected / x;
             c.Removed = s.Removed / x;
             c.Exposed = s.Exposed / x;
+            return c;
+        }
+
+        public static State operator *(State s, double x)
+        {
+            State c = new State();
+            c.Time = s.Time;
+            c.Susceptible = s.Susceptible * x;
+            c.Infected = s.Infected * x;
+            c.Removed = s.Removed * x;
+            c.Exposed = s.Exposed * x;
             return c;
         }
     }
