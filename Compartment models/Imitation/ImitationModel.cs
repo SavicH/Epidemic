@@ -1,4 +1,4 @@
-﻿using Pigeon.Actor;
+﻿using Akka.Actor;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +12,7 @@ namespace CompartmentModels.Imitation
     {
        
         private Timer timer = new Timer();
+        private ActorSystem system;
         private IList<State> state = new List<State>();
         private IList<ActorRef> agents = new List<ActorRef>();
         private IList<ActorRef> locations = new List<ActorRef>();
@@ -22,9 +23,9 @@ namespace CompartmentModels.Imitation
 
         public ImitationModel(State initialState, Parameters parameters, double time)
         {
+            system = new ActorSystem("city");
             this.timeInHours = (int)(time*Parameters.Hours+1);
             SimpleAgent.AgentsState = new State();
-            var system = new ActorSystem(null);
             ActorRef location1 = system.ActorOf(Props.Create(() => new SimpleLocation(agents, 1)));
             ActorRef location2 = system.ActorOf(Props.Create(() => new SimpleLocation(agents, 2)));
 
@@ -80,7 +81,7 @@ namespace CompartmentModels.Imitation
             timer.Stop();
             foreach (var agent in agents)
             {
-                agent.Stop();
+                system.Stop(agent);
             }
             return state;
         }
