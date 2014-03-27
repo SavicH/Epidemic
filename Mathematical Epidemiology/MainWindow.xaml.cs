@@ -22,9 +22,9 @@ namespace MathematicalEpidemiology
     {
         private IModel model;
         private BackgroundWorker backgroundWorker;
-
         private CompartmentModelType modelType = 0;
-        bool isStochastic = false;
+        private int count = 0;
+        private IList<State> solution;
 
         public MainWindow()
         {
@@ -32,31 +32,39 @@ namespace MathematicalEpidemiology
             backgroundWorker = (BackgroundWorker)FindResource("backgroundWorker");
         }
 
-        private double ParseDoubleInvariantly(string s)
+        private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            return double.Parse(
-                s.Replace(",", CultureInfo.InvariantCulture.NumberFormat.NumberDecimalSeparator),
-                CultureInfo.InvariantCulture);
+            infectedChart.Description = new PenDescription("Infected");
+            susceptibleChart.Description = new PenDescription("Susceptible");
+            recoveredChart.Description = new PenDescription("Recovered");
+
+            plotter.Viewport.AutoFitToView = true;
+            ViewportAxesRangeRestriction restr = new ViewportAxesRangeRestriction();
+            plotter.Viewport.Restrictions.Add(restr);
+        }
+
+        private bool IsStochastic()
+        {
+            return comboBoxType.SelectedIndex != 0;
         }
 
         private Parameters ParseParameters()
         {
             Parameters parameters = new Parameters();
-            isStochastic = checkStochastic.IsChecked == true;
-            parameters.Population = isStochastic ? ParseDoubleInvariantly(inputPopulation.Text) : 1;
-            parameters.InfectionRate = ParseDoubleInvariantly(inputInfectionRate.Text);
-            parameters.RecoveryRate = ParseDoubleInvariantly(inputRecoveryRate.Text);
-            parameters.BirthRate = ParseDoubleInvariantly(inputBirthRate.Text);
-            parameters.SusceptibleRate = ParseDoubleInvariantly(inputSusceptibleRate.Text);
-            parameters.ExposedRate = ParseDoubleInvariantly(inputExposedRate.Text);
+            parameters.Population = IsStochastic() ? Utils.ParseDoubleInvariantly(inputPopulation.Text) : 1;
+            parameters.InfectionRate = Utils.ParseDoubleInvariantly(inputInfectionRate.Text);
+            parameters.DiseasePeriod = Utils.ParseDoubleInvariantly(inputRecoveryRate.Text);
+            parameters.BirthRate = Utils.ParseDoubleInvariantly(inputBirthRate.Text);
+            parameters.SusceptibleRate = Utils.ParseDoubleInvariantly(inputSusceptibleRate.Text);
+            parameters.ExposedRate = Utils.ParseDoubleInvariantly(inputExposedRate.Text);
             return parameters;
         }
 
         private State ParseState(Parameters parameters)
         {
             State state = new State();
-            state.Infected = ParseDoubleInvariantly(inputInfected.Text);
-            state.Susceptible = ParseDoubleInvariantly(inputSusceptible.Text);
+            state.Infected = Utils.ParseDoubleInvariantly(inputInfected.Text);
+            state.Susceptible = Utils.ParseDoubleInvariantly(inputSusceptible.Text);
             state.Removed = parameters.Population - state.Infected - state.Susceptible;
             return state;
         }
@@ -67,13 +75,14 @@ namespace MathematicalEpidemiology
             {
                 Parameters parameters = ParseParameters();
                 State state = ParseState(parameters);
+                count = IsStochastic() ? (int)Utils.ParseDoubleInvariantly(inputCount.Text) : 1;
                 model = AnalyticModelFactory.CreateModel(
-                    (CompartmentModelType)modelType, 
-                    isStochastic,
+                    (CompartmentModelType)modelType,
+                    IsStochastic(),
                     state,
                     parameters,
-                    ParseDoubleInvariantly(inputTime.Text),
-                    ParseDoubleInvariantly(inputTimeStep.Text));
+                    Utils.ParseDoubleInvariantly(inputTime.Text),
+                    Utils.ParseDoubleInvariantly(inputTimeStep.Text));
                 progressBar.Value = 0;
                 lblStatus.Text = "Busy";
                 backgroundWorker.RunWorkerAsync();
@@ -84,13 +93,30 @@ namespace MathematicalEpidemiology
             }
         }
 
-        private IList<State> solution;
-
         private void BackgroundWorker_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
         {
             try
             {
-                solution = model.Run();
+                IList<State> tmp;
+                for (int i = 0; i < count; i++)
+                {
+                    if (i == 0)
+                    {
+                        solution = model.Run();
+                    }
+                    else
+                    {
+                        tmp = model.Run();
+                        for (int j = 0; j < solution.Count; j++)
+                        {
+                            solution[j] += tmp[j];
+                        }
+                    }
+                }
+                for (int j = 0; j < solution.Count; j++)
+                {
+                    solution[j] /= count;
+                }
                 backgroundWorker.ReportProgress(100);
             }
             catch (Exception ex)
@@ -124,22 +150,22 @@ namespace MathematicalEpidemiology
             removedDataSource.SetXYMapping(state => new Point(state.Time, state.Removed));
             recoveredChart.DataSource = removedDataSource;
 
-
             plotter.Viewport.FitToView();
         }
 
-        private void checkStochastic_Checked(object sender, RoutedEventArgs e)
+        private void ComboBoxType_SelectionChanged(object sender, RoutedEventArgs e)
         {
-            inputPopulation.IsEnabled = !inputPopulation.IsEnabled;
+            inputPopulation.IsEnabled = IsStochastic();
+            inputCount.IsEnabled = IsStochastic();
             try
             {
-                double infected = ParseDoubleInvariantly(inputInfected.Text);
-                double susceptible = ParseDoubleInvariantly(inputSusceptible.Text);
-                double population = ParseDoubleInvariantly(inputPopulation.Text);
-                inputInfected.Text = checkStochastic.IsChecked == true ?
+                double infected = Utils.ParseDoubleInvariantly(inputInfected.Text);
+                double susceptible = Utils.ParseDoubleInvariantly(inputSusceptible.Text);
+                double population = Utils.ParseDoubleInvariantly(inputPopulation.Text);
+                inputInfected.Text = IsStochastic() ?
                     Math.Round(infected * population).ToString() :
                     Math.Round(infected / population, 5).ToString();
-                inputSusceptible.Text = checkStochastic.IsChecked == true ?
+                inputSusceptible.Text = IsStochastic() ?
                     Math.Round(susceptible * population).ToString() :
                     Math.Round(susceptible / population, 5).ToString();
             }
@@ -149,48 +175,9 @@ namespace MathematicalEpidemiology
             }
         }
 
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            infectedChart.Description = new PenDescription("Infected");
-            susceptibleChart.Description = new PenDescription("Susceptible");
-            recoveredChart.Description = new PenDescription("Recovered");
-
-            plotter.Viewport.AutoFitToView = true;
-            ViewportAxesRangeRestriction restr = new ViewportAxesRangeRestriction();
-            plotter.Viewport.Restrictions.Add(restr);
-        }
-
         private void plotter_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             (sender as ChartPlotter).Viewport.FitToView();
-        }
-
-        public class ViewportAxesRangeRestriction : IViewportRestriction
-        {
-
-            public Rect Apply(Rect oldVisible, Rect newVisible, Viewport2D viewport)
-            {
-                if (newVisible.X < 0)
-                {
-                    newVisible.X = 0;
-                }
-
-                if (newVisible.Y < 0)
-                {
-                    newVisible.Y = 0;
-                }
-
-                return newVisible;
-            }
-
-            public event EventHandler Changed;
-        }
-
-        private void btnAllCharts_Click(object sender, RoutedEventArgs e)
-        {
-            susceptibleChart.Visibility = Visibility.Visible;
-            infectedChart.Visibility = Visibility.Visible;
-            recoveredChart.Visibility = Visibility.Visible;
         }
 
         private void CheckBox_Checked_1(object sender, RoutedEventArgs e)
@@ -222,7 +209,7 @@ namespace MathematicalEpidemiology
             {
                 Parameters parameters = ParseParameters();
                 State state = ParseState(parameters);
-                double time = ParseDoubleInvariantly(inputTime.Text);
+                double time = Utils.ParseDoubleInvariantly(inputTime.Text);
                 model = new ImitationModel(state, parameters, time);
                 backgroundWorker.RunWorkerAsync();
 
@@ -231,8 +218,33 @@ namespace MathematicalEpidemiology
             {
                 MessageBox.Show(ex.Message);
             }
-            
+
         }
- 
+
+        private void btnHide_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        public class ViewportAxesRangeRestriction : IViewportRestriction
+        {
+
+            public Rect Apply(Rect oldVisible, Rect newVisible, Viewport2D viewport)
+            {
+                if (newVisible.X < 0)
+                {
+                    newVisible.X = 0;
+                }
+
+                if (newVisible.Y < 0)
+                {
+                    newVisible.Y = 0;
+                }
+
+                return newVisible;
+            }
+
+            public event EventHandler Changed;
+        }
     }
 }

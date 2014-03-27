@@ -10,13 +10,17 @@ namespace CompartmentModels.Analytic
     {
         private Random random = new Random(DateTime.Now.Millisecond);
 
+        private State initialState;
+
         public StochasticModel(State initialState, Parameters parameters, double time, double timestep)
             : base(initialState, parameters, time, timestep)
         {
+            this.initialState = initialState;
         }
 
         public override IList<State> Run()
         {
+            currentState = initialState;
             int count = (int)Math.Round((time / timestep) + 1);
             IList<State> result = new List<State>(count);
             for (int i = 0; i < count; i++)
