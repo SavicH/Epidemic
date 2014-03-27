@@ -133,9 +133,6 @@
                 </Grid>
 
                 <Grid Grid.Row="2" Margin="0,10,0,0">
-                        <TextBlock Grid.Row="3">Stochastic?</TextBlock>
-                        <CheckBox Grid.Row="3" Grid.Column="1" Name="checkStochastic" IsChecked="True"
-                            Checked="checkStochastic_Checked" Unchecked="checkStochastic_Checked" Height="21" VerticalAlignment="Top" HorizontalAlignment="Right" Width="50" ></CheckBox>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="auto"></RowDefinition>
                         <RowDefinition Height="auto"></RowDefinition>
@@ -182,7 +179,6 @@
                         <ComboBoxItem>Imitation</ComboBoxItem>
                     </ComboBox>
                 </Grid>
-                        <Button Grid.Row ="15" Grid.ColumnSpan="2" Name="btnRunImitationModel" Click="btnRunImitationModel_Click" Margin="0,43,0,-33">Run Imitation model</Button>
             </Grid>
                     
         </Grid>

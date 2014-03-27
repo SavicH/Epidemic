@@ -85,7 +85,7 @@ namespace MathematicalEpidemiology
                 double timestep = Utils.ParseDoubleInvariantly(inputTimeStep.Text);
                 if (comboBoxType.SelectedIndex == 2)
                 {
-                    model = new ImitationModel(state, parameters, time);
+                    model = new ImitationModel(state, parameters, time, timestep * 1000);
                 }
                 else
                 {

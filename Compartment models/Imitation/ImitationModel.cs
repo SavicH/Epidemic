@@ -22,13 +22,13 @@ namespace CompartmentModels.Imitation
         private int timeInHours;
         private bool isOver = false;
 
-        public ImitationModel(State initialState, Parameters parameters, double time)
+        public ImitationModel(State initialState, Parameters parameters, double time, double timestep)
         {
             this.timeInHours = (int)(time * Parameters.Hours + 1);
             this.initialState = initialState;
             this.parameters = parameters;
             timer.Elapsed += timer_Elapsed;
-            timer.Interval = 300;
+            timer.Interval = timestep;
             timer.Stop();
         }
 
