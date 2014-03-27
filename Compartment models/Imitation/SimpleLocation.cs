@@ -17,12 +17,10 @@ namespace CompartmentModels.Imitation
         {
             if (message is Infection)
             {
-                //lock (agents) {
-                    for (int i = 0; i < agents.Count; i++)
-                    {
-                        agents[i].Tell(new Infection(rate));
-                    }
-               // }
+                for (int i = 0; i < agents.Count; i++)
+                {
+                    agents[i].Tell(new Infection(rate));
+                }
             }
 
             if (message is LeaveLocation)

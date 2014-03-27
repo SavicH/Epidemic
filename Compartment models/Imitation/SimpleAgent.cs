@@ -10,10 +10,7 @@ namespace CompartmentModels.Imitation
 {
     class SimpleAgent: UntypedActor
     {
-        public static int r = 0; 
-        //private static int qq = 0;
         private Dictionary<int, ActorRef>  schedule;
-        //private System.IO.StreamWriter writer = new System.IO.StreamWriter(String.Format("qq/{0}.txt", qq++));
         private const double rate = 500; // tmp value
         private double locationRate = 1;
         private static Parameters infectionParameters;
@@ -61,9 +58,6 @@ namespace CompartmentModels.Imitation
         {     
             if (message is Time)
             {
-                ++r;
-                //writer.Write("Susceptible " + currentTime.ToString() + "\n");
-                //writer.Flush();
                 ChangeLocation();
             }
             if (message is Infection)
@@ -83,14 +77,9 @@ namespace CompartmentModels.Imitation
         {
             if (message is Time)
             {
-                ++r;
-                //writer.Write("Infected " + currentTime.ToString() + " " + currentTimeDisease + " " + "\n");
-                //writer.Flush();
                 ChangeLocation();
                 if (currentTimeDisease++ == parameters.DiseasePeriodInHours)
                 {
-                    //writer.Write("healed");
-                    //writer.Flush();
                     Become(Removed);
                     agentsState.Removed++;
                     agentsState.Infected--;
@@ -116,10 +105,7 @@ namespace CompartmentModels.Imitation
         {
             if (message is Time)
             {
-                ++r;
                 currentTime = (++currentTime) % Parameters.Hours;
-                //writer.Write("Removed " + currentTime.ToString() + "\n");
-                //writer.Flush();
             }
         }
 
@@ -127,11 +113,6 @@ namespace CompartmentModels.Imitation
         protected override void OnReceive(object message)
         {
 
-        }
-
-        ~SimpleAgent()
-        {
-            //writer.Close();/
         }
     }
 }
