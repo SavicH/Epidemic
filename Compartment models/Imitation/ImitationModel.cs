@@ -14,9 +14,9 @@ namespace CompartmentModels.Imitation
         private Timer timer = new Timer();
         private State initialState;
         private Parameters parameters;
-        private IList<State> state;
-        private IList<ActorRef> agents;
-        private IList<ActorRef> locations;
+        private List<State> state;
+        private List<ActorRef> agents;
+        private Dictionary<string, ActorRef> locations;
         private System.Threading.ManualResetEvent run = new System.Threading.ManualResetEvent(false);
 
         private int timeInHours;
@@ -28,7 +28,7 @@ namespace CompartmentModels.Imitation
             this.initialState = initialState;
             this.parameters = parameters;
             timer.Elapsed += timer_Elapsed;
-            timer.Interval = 20;
+            timer.Interval = 300;
             timer.Stop();
         }
 
@@ -40,10 +40,10 @@ namespace CompartmentModels.Imitation
             state.Add(tmp);
             tmp.Time += 1.0 / Parameters.Hours;
             SimpleAgent.AgentsState = tmp;
-                foreach (var agent in agents.AsEnumerable())
-                {
-                    agent.Tell(Messages.Time);
-                }
+            for (int i = 0; i < agents.Count && agents[i] != null; i++ )
+            {
+                agents[i].Tell(new Time());
+            }
 
             count++;  // tmp
             if (count == timeInHours)
@@ -62,19 +62,28 @@ namespace CompartmentModels.Imitation
             { }
             run.Reset();  // doesn't work
             timer.Stop();
-            StopModel();
+            //StopModel();
             return state;
+        }
+
+        public void CreateLocations()
+        {
+            List<ActorRef> agentsCopy = new List<ActorRef>();
+            agentsCopy.AddRange(agents);
+            locations = new Dictionary<string, ActorRef>();
+            locations.Add("school", system.ActorOf(Props.Create(() => new SimpleLocation(new List<ActorRef>(), 5))));
+            locations.Add("home", system.ActorOf(Props.Create(() => new SimpleLocation(agentsCopy, 1))));
         }
 
         private void StopModel()
         {
-            foreach (var agent in agents.AsEnumerable())
+            foreach (var agent in agents.AsReadOnly())
             {
                 system.Stop(agent);
             }
-            foreach (var location in locations.AsEnumerable())
+            foreach (var location in locations)
             {
-                system.Stop(location);
+                system.Stop(location.Value);
             }
         }
 
@@ -84,23 +93,24 @@ namespace CompartmentModels.Imitation
             isOver = false;
             state = new List<State>();
             agents = new List<ActorRef>();
-            locations = new List<ActorRef>();
+           
             SimpleAgent.AgentsState = new State();
             system = new ActorSystem(null);
-            locations.Add(system.ActorOf(Props.Create(() => new SimpleLocation(agents, 1))));
-            locations.Add(system.ActorOf(Props.Create(() => new SimpleLocation(agents, 2))));
-            Dictionary<int, ActorRef> tmpSchedule = new Dictionary<int, ActorRef>() { { 0, locations[0] }, { 20, locations[1] } };
+
+            CreateLocations();
+            
+            Dictionary<int, ActorRef> tmpSchedule = new Dictionary<int, ActorRef>() { { 8, locations["school"] }, { 18, locations["home"] } };
             for (int i = 0; i < initialState.Susceptible; i++)
             {
-                agents.Add(system.ActorOf(Props.Create(() => new SimpleAgent(locations[0], Compartment.Susceptible, parameters, tmpSchedule))));
+                agents.Add(system.ActorOf(Props.Create(() => new SimpleAgent(locations["home"], Compartment.Susceptible, parameters, tmpSchedule))));
             }
             for (int i = 0; i < initialState.Infected; i++)
             {
-                agents.Add(system.ActorOf(Props.Create(() => new SimpleAgent(locations[0], Compartment.Infected, parameters, tmpSchedule))));
+                agents.Add(system.ActorOf(Props.Create(() => new SimpleAgent(locations["home"], Compartment.Infected, parameters, tmpSchedule))));
             }
             for (int i = 0; i < initialState.Removed; i++)
             {
-                agents.Add(system.ActorOf(Props.Create(() => new SimpleAgent(locations[0], Compartment.Removed, parameters, tmpSchedule))));
+                agents.Add(system.ActorOf(Props.Create(() => new SimpleAgent(locations["home"], Compartment.Removed, parameters, tmpSchedule))));
             }
         }
 
