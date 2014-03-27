@@ -15,24 +15,21 @@ namespace CompartmentModels.Imitation
 
         protected override void OnReceive(object message)
         {
-            lock (agents)
+            if (message is Infection)
             {
-                if (message is Infection)
+                foreach (var agent in agents.AsEnumerable())
                 {
-                    foreach (var agent in agents)
-                    {
-                        agent.Tell(new Infection(rate));
-                    }
+                    agent.Tell(new Infection(rate));
                 }
+            }
 
-                if (message == Messages.LeaveLocation)
-                {
-                    agents.Remove(Sender);
-                }
-                if (message == Messages.EnterLocation)
-                {
-                    agents.Add(Sender);
-                }
+            if (message == Messages.LeaveLocation)
+            {
+                agents.Remove(Sender);
+            }
+            if (message == Messages.EnterLocation)
+            {
+                agents.Add(Sender);
             }
         }
 
@@ -41,6 +38,6 @@ namespace CompartmentModels.Imitation
             this.agents = agents;
             this.rate = rate;
         }
-        
+
     }
 }
