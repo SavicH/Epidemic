@@ -30,11 +30,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Akka">
+      <HintPath>..\Mathematical Epidemiology\libs\Akka.dll</HintPath>
+    </Reference>
     <Reference Include="DotNumerics">
       <HintPath>..\Mathematical Epidemiology\libs\DotNumerics.dll</HintPath>
     </Reference>
-    <Reference Include="Pigeon">
-      <HintPath>..\Mathematical Epidemiology\libs\Pigeon.dll</HintPath>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\Mathematical Epidemiology\libs\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
